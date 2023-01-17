@@ -38,6 +38,11 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined>>
     options: {
@@ -77,6 +82,11 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined
 
@@ -87,35 +97,91 @@ type chartProp = {
 const DataKeys = ({setOptions, options, dataKeysView, setDataKeysView}: chartProp) => {
 
     
+    
     return (
         <StyledPopup 
-        // onClick={(e) => {
-        //     e.preventDefault()
-        //     setTitleView(false)
-        // }} 
         style={{display: dataKeysView ? '' : 'none'}} >
           <div  className='outer-div' >
-            {options?.series!.map((data, i) => {
-                let name = "Limit"
-                if (i < 3) {
-                    name = "Data"
-                }
-                return (
-                    <div key={`${data.name}${i}`} >
-                    <label>{name}</label><input 
-                    value={data.name} type="text"
-                    onChange={(e) => {
-                        setOptions((currOptions) => {
-                            let newOptions = {...currOptions!}
-                            newOptions.series[i].name = e.target.value
-                            return newOptions
-                        })
-                    }}
-                    />
-                    </div>
-
-                )
-            })}
+            <div style={{display: options?.series[0].data.length! > 1 ? '' : 'none'}} >
+            <label>{"Data Line"}</label>
+            <input 
+            defaultValue={options?.series[0].name}
+            type={"text"} 
+            onChange={(e) => {
+                setOptions((currOptions) => {
+                    let newOptions = {...currOptions!}
+                    newOptions.series[0].name = e.target.value
+                    return newOptions
+                })
+            }} />
+            </div>
+            <div style={{display: options?.series[1].data.length! > 1 ? '' : 'none'}} >
+            <label>{"Data Line"}</label>
+            <input 
+            defaultValue={options?.series[1].name}
+            type={"text"} 
+            onChange={(e) => {
+                setOptions((currOptions) => {
+                    let newOptions = {...currOptions!}
+                    newOptions.series[1].name = e.target.value
+                    return newOptions
+                })
+            }} />
+            </div>
+            <div style={{display: options?.series[2].data.length! > 1 ? '' : 'none'}} >
+            <label>{"Data Line"}</label>
+            <input 
+            defaultValue={options?.series[2].name}
+            type={"text"} 
+            onChange={(e) => {
+                setOptions((currOptions) => {
+                    let newOptions = {...currOptions!}
+                    newOptions.series[2].name = e.target.value
+                    return newOptions
+                })
+            }} />
+            </div>
+            <div style={{display: options?.series[3].data.length! > 1 ? '' : 'none'}} >
+            <label>{"Limit Line"}</label>
+            <input 
+            defaultValue={options?.series[3].name}
+            type={"text"} 
+            onChange={(e) => {
+                setOptions((currOptions) => {
+                    let newOptions = {...currOptions!}
+                    newOptions.series[3].name = e.target.value
+                    return newOptions
+                })
+            }} />
+            </div>
+            <div style={{display: options?.series[4].data.length! > 1 ? '' : 'none'}} >
+            <label>{"Limit Line"}</label>
+            <input 
+            defaultValue={options?.series[4].name}
+            type={"text"} 
+            onChange={(e) => {
+                setOptions((currOptions) => {
+                    let newOptions = {...currOptions!}
+                    newOptions.series[4].name = e.target.value
+                    return newOptions
+                })
+            }} />
+            </div>
+            <div style={{display: options?.series[5].data.length! > 1 ? '' : 'none'}} >
+            <label>{"Limit Line"}</label>
+            <input 
+            defaultValue={options?.series[5].name}
+            type={"text"} 
+            onChange={(e) => {
+                setOptions((currOptions) => {
+                    let newOptions = {...currOptions!}
+                    newOptions.series[5].name = e.target.value
+                    return newOptions
+                })
+            }} />
+            </div>
+            
+            
             <div><button onClick={(e) => {
                 e.preventDefault()
                 setDataKeysView(false)
@@ -153,6 +219,8 @@ top: 0;
     div{
         margin-top: 20px;
         label {
+            color: #61DAFB;
+            font-weight: bold;
             margin-right: 10px;
         }
         button {

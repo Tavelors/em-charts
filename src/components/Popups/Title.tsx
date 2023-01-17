@@ -39,6 +39,11 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined>>
     options: {
@@ -78,6 +83,11 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined
 
@@ -99,7 +109,10 @@ const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
           <form>
             <div><label>Test Type</label>
             <input type={"text"} 
-                value={options?.title.text} onChange={(e) => setOptions((curr) => {
+                defaultValue={options?.title.text}
+                // value={options?.title.text} 
+                onChange={(e) => setOptions((curr) => {
+                    e.preventDefault()
                     let newCurr = {...curr!}
                     newCurr.title.text = e.target.value
                     return newCurr
@@ -108,16 +121,21 @@ const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
             </div>
             <div><label>EUT Description</label>
             <input type={"text"} 
-            value={options?.subtitle.text} onChange={(e) => setOptions((curr) => {
+            defaultValue={options?.subtitle.text}
+            // value={options?.subtitle.text} 
+            onChange={(e) => setOptions((curr) => {
+                e.preventDefault()
                 let newCurr = {...curr!}
                 newCurr.subtitle.text = e.target.value
                 return newCurr
             })} /></div>
             <div><label>Graph Information</label>
             <input type={"text"} 
-            value={options?.caption.text} onChange={(e) => setOptions((curr) => {
+            defaultValue={options?.caption.text}
+            // value={options?.caption.text} 
+            onChange={(e) => setOptions((curr) => {
                 let newCurr = {...curr!}
-                // newCurr. = e.target.value
+                newCurr.caption.text = e.target.value
                 return newCurr
             })} /></div>
             <div><button onClick={(e) => {
@@ -157,6 +175,8 @@ top: 0;
     div{
         margin-top: 20px;
         label {
+            color: #61DAFB;
+            font-weight: bold;
             margin-right: 10px;
         }
         button {

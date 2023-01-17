@@ -39,6 +39,11 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined>>
     options: {
@@ -78,13 +83,20 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined
+    setFileCount: React.Dispatch<React.SetStateAction<number>>
+    fileCount: number
 }
 
-const Limits = ({setOptions, options}: chartProp) => {
+const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
 
-    const [fileCount, setFileCount] = useState(0)
+    
     // const [FirstFileData, setFirstFileData] = useState<number[][]>([])
     // const [FirstFileDataName, setFirstFileDataName] = useState<string>("")
     // const [SecondFileData, setSecondFileData] = useState<number[][]>([])
@@ -257,7 +269,7 @@ const Limits = ({setOptions, options}: chartProp) => {
     
     if (file.length === 1) {  
         if (fileCount < 1) {
-            console.log("running here 1 file");
+           
             
             
             const fileArray:string = file[0].split("\n")
@@ -271,7 +283,7 @@ const Limits = ({setOptions, options}: chartProp) => {
         
         setFileCount(1)
         setOptions((currOptions) => {  
-            console.log("inside");   
+             
             let newOptions = {...currOptions!}  
             
               
@@ -279,13 +291,19 @@ const Limits = ({setOptions, options}: chartProp) => {
                 data: firstfileData,
                 color: "red", 
                 type: "line",
-                name: limitName}
+                name: limitName,
+                marker: {
+                    symbol: "circle",
+                    width: 20,
+                    height: 20,
+                }
+            }
                 counter++
             return newOptions
             })
         
         } else if (fileCount === 1) {
-            console.log("running here 2 file");
+            
 
             const fileArray:string = file[0].split("\n")
             const limitName = fileArray[0]
@@ -296,13 +314,19 @@ const Limits = ({setOptions, options}: chartProp) => {
         }
         setFileCount(2)
         setOptions((currOptions) => {  
-            console.log("inside"); 
+           
             let newOptions = {...currOptions!}   
             newOptions.series[4] = {
                 data: firstfileData,
                 color: "blue",
                  type: "line",
-                name: limitName}  
+                name: limitName,
+                marker: {
+                    symbol: "diamond",
+                    width: 20,
+                    height: 20,
+                }
+            }  
             return newOptions
             })
         } else if (fileCount === 2) {
@@ -315,19 +339,25 @@ const Limits = ({setOptions, options}: chartProp) => {
         }
         setFileCount(0)
         setOptions((currOptions) => {  
-            console.log("inside"); 
+            
             let newOptions = {...currOptions!}   
             newOptions.series[5] = {
                 data: firstfileData,
                 color: "green",
                  type: "line",
-                name: limitName}  
+                name: limitName,
+                marker: {
+                    symbol: "triangle-down",
+                    width: 20,
+                    height: 20,
+                }
+            }  
             return newOptions
             })
         }
             
     } else if (file.length === 2) {
-        console.log("running here 2 file length");
+        
 
         const fileArray:string = file[0].split("\n")
         const secondFileArray:string = file[1].split('\n')
@@ -341,22 +371,34 @@ const Limits = ({setOptions, options}: chartProp) => {
         }
         setFileCount(2)
         setOptions((currOptions) => {  
-            console.log("inside");  
+             
             let newOptions = {...currOptions!}
             newOptions.series[3] = {
                 data: firstfileData,
                 color: "red",
                 type: "line",
-                name: limitName}
+                name: limitName,
+                marker: {
+                    symbol: "diamond",
+                    width: 20,
+                    height: 20,
+                }
+            }
                 newOptions.series[4] = {
                 data: secondFileData,
                 color: "blue", 
                 type: "line",
-                name: secondLimitName}
+                name: secondLimitName,
+                marker: {
+                    symbol: "circle",
+                    width: 20,
+                    height: 20,
+                }
+            }
             return newOptions
         })
     } else if (file.length === 3) {
-        console.log("running here 3 file length");
+        
 
         const fileArray:string = file[0].split("\n")
         const secondFileArray:string = file[1].split('\n')
@@ -373,25 +415,45 @@ const Limits = ({setOptions, options}: chartProp) => {
         }
         setFileCount(0)
         setOptions((currOptions) => {   
-            console.log("inside");  
+              
             let newOptions = {...currOptions!}
             newOptions.series[3] = {
                 data: firstfileData,
                 color: "red", 
                 type: "line",
-                name: limitName}
+                name: limitName,
+                marker: {
+                    symbol: "square",
+                    width: 20,
+                    height: 20,
+                }
+            }
             newOptions.series[4] = {
                 data: secondFileData,
                 color: "blue", 
                 type: "line",
-                name: secondLimitName}
+                name: secondLimitName,
+                marker: {
+                    symbol: "triangle",
+                    width: 20,
+                    height: 20,
+                }
+            }
             newOptions.series[5] = {
                 data: thirdFileData,
                 color: "green", 
                 type: "line",
-                name: thirdLimitName}
+                name: thirdLimitName,
+                marker: {
+                    symbol: "circle",
+                    width: 20,
+                    height: 20,
+                }
+            }
             return newOptions
         })
+    } else if (file.length > 3) {
+        alert("No more than three Limit Files!")
     }
     
     
@@ -406,32 +468,45 @@ const Limits = ({setOptions, options}: chartProp) => {
 
 
     return (
-        <StyledDiv>
-            
-            <form>
-                <input  onChange={(e) => readFile(e)} multiple type="file" />
-            </form>
-
-        </StyledDiv>
+        <StyledForm  >
+               <label htmlFor="filePick" >Limit<br></br>Files</label>
+                 <input  onChange={(e) => readFile(e)} 
+                type="file" 
+                multiple 
+                id="filePick"
+                style={{visibility: "hidden"}}
+                />
+            </StyledForm>
     )
 }
 
-const StyledDiv = styled.div `
+const StyledForm = styled.form `
 
-margin-top: 20px;
+background-color: #16181D;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+/* border: 2px solid #121212; */
+height: 40px;
+width: 55px;
 
-div {
 
-
+&:hover {
+    background-color: #61DAFB;
     label {
-        margin: 10px;
-        font-size: 20px;
+        color:#16181D;
     }
-    input {
-        margin: 10px;
-        width: 20px;
-        height: 20px;
-    }
+}
+:active {
+    background-color: white;
+}
+
+label {
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 3px;
+    font-weight: bold;
 }
 
 `

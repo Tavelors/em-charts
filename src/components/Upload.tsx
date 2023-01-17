@@ -1,4 +1,7 @@
+import React, {Component} from "react";
 import { useState } from "react";
+import styled from 'styled-components'
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 type chartProp = {
@@ -39,6 +42,11 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined>>
     options: {
@@ -78,13 +86,21 @@ type chartProp = {
             color: string;
             type: string;
             name: string;
+            marker: {
+                symbol: string;
+                height: number;
+                width: number;
+            }
         }[];
     } | undefined
+    setFileCount: React.Dispatch<React.SetStateAction<number>>
 }
 
-const Upload = ({setOptions, options}: chartProp) => {
+const Upload = ({setOptions, options, setFileCount}: chartProp) => {
 
     const [dataSize, setDataSize] = useState<number>(0)
+
+
     const readFile = async (e: any) => {
         e.preventDefault()
 
@@ -106,7 +122,7 @@ const Upload = ({setOptions, options}: chartProp) => {
             if (dataSize < 1) {
 
                 let splitFile = file[0].split('\n')
-                // console.log(splitFile[splitFile.length - 1]);
+               
             
             for(let i=0; i<splitFile.length; i++) {
                 if (splitFile[i] !== "") {
@@ -114,8 +130,10 @@ const Upload = ({setOptions, options}: chartProp) => {
                 }
                 
             }
-            
+            let tickArray = [0.009, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.15]
+            let newTickArray = []
             setDataSize(1)
+            setFileCount(0)
             setOptions(() => {
                 
                 let newOption
@@ -123,39 +141,162 @@ const Upload = ({setOptions, options}: chartProp) => {
                     chart: {
                         height: 600,
                         type: "line",
-                        marginBottom: 150,
-                        marginTop: 80,
+                        marginBottom: 180,
+                        marginTop: 90,
                     },
                     plotOptions: {
                         series: {
-                            lineWidth: 0.5
-                        }
+                            lineWidth: 0.5,
+                            dataLabels: {
+                                // enabled: true,
+                                // allowOverlap: true,
+                                // formatter: function(ok: any) {
+                                //   let first = firstData[0][0]
+                                  
+                                // //   let last = realData[realData.length - 1]
+                                //   // if (real)
+                                // // if()
+                                //   console.log(ok);
+                                  
+                                //   return first
+                                // }
+                              },
+                        },
+
                     },
-                    title: {text: "Title", align: "left"},
+                    title: {text: "Conducted / Radiated Emissions (Class A/B)",
+                     align: "left",
+                     style: {
+                        "font-size" : "40px",
+                        "marginTop" : "10px"
+                     },
+                     y: 30,
+
+                    },
                     caption: {
-                        text: "Caption",
+                        text: "Graph Number and description",
                         align: "center",
+                        style: {
+                            "font-size" : "20px"
+                        },
                     },
                     subtitle: {
-                        text: `Subtitle`, 
+                        text: `Manufacturer name - Product name`, 
                         align: "left",
                         useHTML: true,
+                        style: {
+                            "font-size" : "20px"
+                        },
                         x: 0,
-                        y: 40,
+                        y: 60,
                       },
-                    
+                    //logarithmic
                     xAxis: {
                         title: {text: "Frequency (Mhz)"},
                         type: 'logarithmic',
+                        showLastLabel: true,
+                        showFirstLabel: true,
+                        tickInterval: 0.1,
+                        labels: {
+                                format: '{value:.3f}'
+                        },
+                        // minorTickInterval: 'auto',
+                        // endOnTick: true,
+                        // startOnTick: true,
+                        // tickPosition: "inside"
+                        // tickPosition: "outside"
+                        
+                        // tickPositions: [0.009, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.15],
+                        tickPositions: [-2.04575749056, -2, -1.69897000434,-1.52287874528 , -1.30102999566, -1.09691001301, -1, -0.82390874094],
+                        tickPositioner: function () {
+                            // console.log(this.tickPositions);
+                            
+                            // let newArray = []
+                            // newArray[0] = this.tickPositions[2]
+                            // newArray.push(this.tickPositions[2])
+                            // newArray.push(this.tickPositions[3])
+                            // console.log(newArray)
+                            
+                            return [0.009, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.15]
+                        },
+                        gridLineWidth: 1,
+                        lineWidth: 2,
+                        // allowDecimals: true,
+                        angle: 30
+                        
+                        
                     },
                     yAxis: {
-                        title: {text: "dBuV"}
+                        title: {text: "Emissions level (dBuV)"},
+                        
+
                     },
                     series: [{
                         data: firstData, 
+                        pointStart: 1,
                         color: "purple",
                         type: 'line',
-                        name: '1st'
+                        name: '1st',
+                        marker: {
+                            symbol: "triangle",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[0.15,1]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "square",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "circle",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "diamond",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "triangle-down",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "triangle",
+                            width: 20,
+                            height: 20,
+                        }
                     },],
                     legend: {
                         layout: 'vertical',
@@ -167,12 +308,34 @@ const Upload = ({setOptions, options}: chartProp) => {
                           },
                         x:0,
                         y:10,
-                    }
+                    },
+                    // labels: {
+                    //     items: [
+                    //         {
+                    //             html: `${firstData[0][0]}`,
+                    //             style: {
+                    //                 top: "350px",
+                    //                 left: "00.px",
+                    //                 fontSize: "10px",
+                    //             }
+                    //         }
+                    //     ]
+                    // },
+                    exporting: {
+                        sourceWidth: 1920,
+                        sourceHeight: 1080,
+                        allowHTML: true
+                      }
                   }
+                  console.log(tickArray);
+                  
+                  
                   return newOption
                 })
+                // options.
+                
             } else if (dataSize === 1) {
-                console.log("here", '2');
+                
                 
                 let splitFile = file[0].split('\n')
                 for(let i=0; i<splitFile.length; i++) {
@@ -180,7 +343,7 @@ const Upload = ({setOptions, options}: chartProp) => {
                         secondData.push([+splitFile[i].split('\t')[0], +splitFile[i].split('\t')[1]])
                     }
                 }
-                console.log(options?.series);
+                
                 
                 setDataSize(2)
                 setOptions((currOptions) => {
@@ -189,7 +352,12 @@ const Upload = ({setOptions, options}: chartProp) => {
                         data: secondData,
                         color: "#cf8b0c",
                         type: "line",
-                        name: "2nd"
+                        name: "2nd",
+                        marker: {
+                            symbol: "square",
+                            width: 20,
+                            height: 20,
+                        }
                     }
                     return newOptions
                 })
@@ -197,17 +365,18 @@ const Upload = ({setOptions, options}: chartProp) => {
 
             } else if (dataSize === 2) {
                 
-                let splitFile = file[0].split('\n')
-                for(let i=0; i<splitFile.length; i++) {
+
+                    let splitFile = file[0].split('\n')
+                    for(let i=0; i<splitFile.length; i++) {
                     if (splitFile[i] !== "") {
                         thirdData.push([+splitFile[i].split('\t')[0], +splitFile[i].split('\t')[1]])
                     }
                 }
-                setDataSize(3)
-                console.log(options?.series);
+                setDataSize(0)
+               
                 
                 setOptions((currOptions) => {
-                    console.log(currOptions?.series, "series");
+                    
                     
                     
                     let newOptions = {...currOptions!}
@@ -215,13 +384,26 @@ const Upload = ({setOptions, options}: chartProp) => {
                         data: thirdData,
                         color: '#418a09',
                         type: "line",
-                        name: "3rd"
+                        name: "3rd",
+                        marker: {
+                            symbol: "diamond",
+                            width: 20,
+                            height: 20,
+                        }
                     }
                     return newOptions
                 })
+            
             }
         } else if (file.length === 2) {
-            
+                
+            if (dataSize >= 2) {
+                
+                alert("To many files!")
+
+            } else {
+                
+                          
             
             let splitFile = file[0].split('\n')
             let secondSplitFile = file[1].split('\n')
@@ -237,6 +419,8 @@ const Upload = ({setOptions, options}: chartProp) => {
                     secondData.push([+secondSplitFile[i].split('\t')[0], +secondSplitFile[i].split('\t')[1]])
                 }               
             }
+
+            setFileCount(0)
             setDataSize(2)
             setOptions(() => {
                 
@@ -245,25 +429,39 @@ const Upload = ({setOptions, options}: chartProp) => {
                     chart: {
                         height: 600,
                         type: "line",
-                        marginBottom: 150,
-                        marginTop: 80,
+                        marginBottom: 180,
+                        marginTop: 90,
                     },
                     plotOptions: {
                         series: {
                             lineWidth: 0.5
                         }
                     },
-                    title: {text: "Title", align: "left"},
+                    title: {text: "Conducted / Radiated Emissions (Class A/B)",
+                     align: "left",
+                     style: {
+                        "font-size" : "40px",
+                        "marginTop" : "10px"
+                     },
+                     y: 30,
+
+                    },
                     caption: {
-                        text: "Caption",
+                        text: "Graph Number and description",
                         align: "center",
+                        style: {
+                            "font-size" : "20px"
+                        },
                     },
                     subtitle: {
-                        text: `Subtitle`, 
+                        text: `Manufacturer name - Product name`, 
                         align: "left",
-                        useHTML: true,
+                        useHTML: false,
+                        style: {
+                            "font-size" : "20px"
+                        },
                         x: 0,
-                        y: 40,
+                        y: 60,
                       },
                     
                     xAxis: {
@@ -271,18 +469,73 @@ const Upload = ({setOptions, options}: chartProp) => {
                         type: 'logarithmic',
                     },
                     yAxis: {
-                        title: {text: "dBuV"}
+                        title: {text: "Emissions level (dBuV)"}
                     },
                     series: [{
                         data: firstData, 
                         color: "purple",
                         type: 'line',
-                        name: '1st'
-                    },{
+                        name: '1st',
+                        marker: {
+                            symbol: "circle",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
                         data: secondData, 
                         color: "#cf8b0c",
                         type: 'line',
-                        name: '2nd'
+                        name: '2nd',
+                        marker: {
+                            symbol: "diamond",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "circle",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "diamond",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "triangle-down",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "triangle",
+                            width: 20,
+                            height: 20,
+                        }
                     },],
                     legend: {
                         layout: 'vertical',
@@ -294,10 +547,16 @@ const Upload = ({setOptions, options}: chartProp) => {
                           },
                         x:0,
                         y:10,
-                    }
+                    },
+                    exporting: {
+                        sourceWidth: 1920,
+                        sourceHeight: 1080,
+                        allowHTML: true
+                      }
                   }
                   return newOption
                 })
+            }
         } else if (file.length === 3) {
             let splitFile = file[0].split('\n')
             let secondSplitFile = file[1].split('\n')
@@ -318,6 +577,7 @@ const Upload = ({setOptions, options}: chartProp) => {
                     thirdData.push([+thirdSplitFile[i].split('\t')[0], +thirdSplitFile[i].split('\t')[1]])
                 }               
             }
+            setFileCount(0)
             setDataSize(0)
             setOptions(() => {
                 
@@ -326,25 +586,39 @@ const Upload = ({setOptions, options}: chartProp) => {
                     chart: {
                         height: 600,
                         type: "line",
-                        marginBottom: 150,
-                        marginTop: 80,
+                        marginBottom: 180,
+                        marginTop: 90,
                     },
                     plotOptions: {
                         series: {
                             lineWidth: 0.5
                         }
                     },
-                    title: {text: "Title", align: "left"},
+                    title: {text: "Conducted / Radiated Emissions (Class A/B)",
+                     align: "left",
+                     style: {
+                        "font-size" : "40px",
+                        "marginTop" : "10px"
+                     },
+                     y: 30,
+
+                    },
                     caption: {
-                        text: "Caption",
+                        text: "Graph Number and description",
                         align: "center",
+                        style: {
+                            "font-size" : "20px"
+                        },
                     },
                     subtitle: {
-                        text: `Subtitle`, 
+                        text: `Manufacturer name - Product name`, 
                         align: "left",
                         useHTML: true,
+                        style: {
+                            "font-size" : "20px"
+                        },
                         x: 0,
-                        y: 40,
+                        y: 60,
                       },
                     
                     xAxis: {
@@ -352,23 +626,72 @@ const Upload = ({setOptions, options}: chartProp) => {
                         type: 'logarithmic',
                     },
                     yAxis: {
-                        title: {text: "dBuV"}
+                        title: {text: "Emissions level (dBuV)"}
                     },
                     series: [{
                         data: firstData, 
                         color: "purple",
                         type: 'line',
-                        name: '1st'
+                        name: '1st',
+                        marker: {
+                            symbol: "square",
+                            width: 20,
+                            height: 20,
+                        }
                     },{
                         data: secondData, 
                         color: "#cf8b0c",
                         type: 'line',
-                        name: '2nd'
-                    },{
+                        name: '2nd',
+                        marker: {
+                            symbol: "diamond",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
                         data: thirdData, 
-                        color: '#418a09',
+                        color: "#42f57e",
                         type: 'line',
-                        name: '3rd'
+                        name: '3rd',
+                        marker: {
+                            symbol: "circle",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "diamond",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "triangle-down",
+                            width: 20,
+                            height: 20,
+                        }
+                    },
+                    {
+                        data: [[]], 
+                        color: "white",
+                        type: 'line',
+                        name: '',
+                        marker: {
+                            symbol: "triangle",
+                            width: 20,
+                            height: 20,
+                        }
                     },],
                     legend: {
                         layout: 'vertical',
@@ -380,7 +703,12 @@ const Upload = ({setOptions, options}: chartProp) => {
                           },
                         x:0,
                         y:10,
-                    }
+                    },
+                    exporting: {
+                        sourceWidth: 1920,
+                        sourceHeight: 1080,
+                        allowHTML: true
+                      }
                   }
                   return newOption
                 })
@@ -388,13 +716,49 @@ const Upload = ({setOptions, options}: chartProp) => {
 
         
     }
-
+ 
+   
 
     return (
-            <form>
-                <input onChange={(e) => readFile(e)} type="file" multiple />
-            </form>
+            <StyledForm  >
+               <label htmlFor="filePicker" >Data<br></br>Files</label>
+                 <input  onChange={(e) => readFile(e)} 
+                type="file" 
+                multiple 
+                id="filePicker"
+                style={{visibility: "hidden"}}
+                />
+            </StyledForm>
     )
 }
 
 export default Upload
+
+const StyledForm = styled.form`
+background-color: #16181D;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+/* border: 2px solid #121212; */
+height: 40px;
+width: 55px;
+
+
+&:hover {
+    background-color: #61DAFB;
+    label {
+        color:#16181D;
+    }
+}
+:active {
+    background-color: white;
+}
+
+label {
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 3px;
+    font-weight: bold;
+}
+`
