@@ -10,13 +10,19 @@ import PeakFile from './PeakFile'
 import AxisLabel from "./Popups/AxisLabel";
 import Title from "./Popups/Title";
 import DataKeys from "./Popups/DataKeys";
+import ResizeY from "./Popups/ResizeY";
 import Select from 'react-select'
 import styled from 'styled-components'
 import DataDrop from "./DataDrop";
 import quasi from '../images/quasi.png'
 import peak from '../images/peak.png'
 import average from '../images/average.png'
+// import HC_more from 'highcharts/highcharts-more';
+// HC_more(Highcharts)
+require('highcharts/highcharts-more')(Highcharts)
+
 require("highcharts/modules/exporting")(Highcharts);
+
 
 
 
@@ -26,6 +32,7 @@ export default function Chart() {
   const [axisLabelView, setAxisLabelView] = useState<boolean>(false)
   const [titleView, setTitleView] = useState<boolean>(false)
   const [dataKeysView, setDataKeysView] = useState<boolean>(false)
+  const [changeAxisView, setChangeAxisView] = useState<boolean>(false)
   const [fileCount, setFileCount] = useState(0)
   const [peakCount, setPeakCount] = useState(0)
 
@@ -51,11 +58,18 @@ export default function Chart() {
             text: string;
         };
         type: string;
+        tickInterval: number;
+            labels: {
+                format: string;
+            }
+            tickPositions: any;
     };
     yAxis: {
       title: {
           text: string;
       };
+      min: number | null;
+      max: number | null;
     };
     caption: {
       text: string;
@@ -75,13 +89,17 @@ export default function Chart() {
 }>()
 
 
-
+Highcharts.setOptions({
+  lang: {
+    numericSymbols:  []
+  },
+});
 
 
     const handleClickk = () => {
       console.log("here")
       let realData = [[0,3],[1,8],[2,6],[3,4],
-      [4,10],[5,7],[6,3],[7,4],[8,8],[9,6],
+      [4,10],[5,7],[6,3],[7,4],[8,60],[9,6],
       [10,1],[11,4],[12,9],
     
     ]
@@ -99,15 +117,10 @@ export default function Chart() {
               lineWidth: 0.5,
               dataLabels: {
                 enabled: true,
-                allowOverlap: true,
-                // formatter: function() {
-                //   let first = realData[0]
-                //   let last = realData[realData.length - 1]
-                //   // if (real)
-                //   console.log(first.y);
-                  
-                  
-                // }
+                // allowOverlap: true,
+                formatter: function() {
+ 
+                }
               },
             }
           },
@@ -256,6 +269,16 @@ export default function Chart() {
             title: {text: 'Frequency (MHz)'}, 
             type: 'logarithmic',
             // tickInterval: 0.2,
+            tickInterval: 0.1,
+            labels: {
+                format: '',
+            },
+            
+            // formatter: function() {
+                
+                
+            // },
+            tickPositions: undefined,
             alignTicks: false,
             gridLineWidth: 1,
             lineWidth: 2,
@@ -264,10 +287,22 @@ export default function Chart() {
             showFirstLabel: true,
             // endOnTick: true,
             crosshair: true,
+            // tickPositioner: function () {
+            //   this.tickPositions
+            // }
             
           },
           yAxis: {
-            title: {text: 'Emissions level (dBuV)'}
+            title: {text: 'Emissions level (dBuV)'},
+            max: 120,
+            min: 0,
+            formatter: function() {}
+            // tickPositions: [0, 10, 20, 30 ,40 ,50],
+            
+            // tickPositioner: function () {
+            //   console.log(this.tickPositions);
+              
+            // }
           },
           buttons: [{
             text: "button",
@@ -320,10 +355,11 @@ export default function Chart() {
   return (
     <div className="custom-chart"  >
       
-      <button>update</button>
+      
       <HighchartsReact 
     id="chart-test"
     highcharts={Highcharts}
+    // tick={Highcharts.Tick}
     options={options}
     containerProps={{ style: { height: "100%" } }}
     redraw={false}
@@ -335,7 +371,8 @@ export default function Chart() {
     titleView={titleView} setTitleView={setTitleView} />
     <DataKeys setOptions={setOptions} options={options}
     dataKeysView={dataKeysView} setDataKeysView={setDataKeysView} />
-    
+    <ResizeY setOptions={setOptions} options={options} 
+    changeAxisView={changeAxisView} setChangeAxisView={setChangeAxisView} />
     <StyledList>
       <li>
         <StyledDiv onMouseEnter={() => {
@@ -349,7 +386,7 @@ export default function Chart() {
         <li><button onClick={() => setTitleView(true)} >Title</button></li>
         <li><button onClick={() => setDataKeysView(true)} >Data Labels</button></li>
         <li><button onClick={() => setAxisLabelView(true)} >Axis Labels</button></li>
-        <li><button>Fourth</button></li>
+        <li><button onClick={() => setChangeAxisView(true)} >Change YAxis</button></li>
       </ul>
     </StyledDiv>
     </li>
@@ -371,16 +408,56 @@ export default function Chart() {
         peakCount={peakCount} setPeakCount={setPeakCount}
       />
       </li>
+      <li>
+        <div>
+          <label className="maxlabel" >max</label>
+        </div>
+        <div>
+        <button className="maxup" onClick={() => {
+          setOptions((currOptions) => {
+            let newOptions = {...currOptions!}
+            newOptions.yAxis.max! += 10
+            return newOptions
+          })
+        }} >⬆</button>
+        </div>
+        <div>
+        <button className="maxdown" onClick={() => {
+          setOptions((currOptions) => {
+            let newOptions = {...currOptions!}
+            newOptions.yAxis.max! -= 10
+            return newOptions
+          })
+        }} >⬇</button>
+        </div>
+      </li>
+      <li>
+      <div>
+          <label className="minlabel" >min</label>
+        </div>
+        <div>
+        <button className="minup" onClick={() => {
+          setOptions((currOptions) => {
+            let newOptions = {...currOptions!}
+            newOptions.yAxis.min! += 10
+            return newOptions
+          })
+        }} >⬆</button>
+        </div>
+        <div>
+        <button className="mindown" onClick={() => {
+          setOptions((currOptions) => {
+            let newOptions = {...currOptions!}
+            newOptions.yAxis.min! -= 10
+            return newOptions
+          })
+        }} >⬇</button>
+        </div>
+      </li>
+     
     </StyledList>
-    
-  
-   
-      
-      
-    {/* <button onClick={handleClick} >click</button> */}
+
     <button onClick={handleClickk} >cliccc</button>
-    {/* <Upload setOptions={setOptions} options={options} />
-    <Limits setOptions={setOptions} options={options} /> */}
     </div>
   );
 }
@@ -414,6 +491,104 @@ color: #61DAFB;
 margin-left: 10px;
 margin-top: 20px;
 height: 36px;
+}
+.maxlabel {
+color: #61DAFB;
+font-size: 10px;
+margin-left: 8px;
+}
+.minlabel {
+color: #61DAFB;
+font-size: 10px;
+margin-left: 8px;
+}
+.maxup {
+background-color: #16181D;
+color: #61DAFB;
+font-size: 15px;
+padding-bottom: 10px;
+padding-right: 10px;
+display: table-cell; 
+vertical-align: middle;
+font-weight: bold;
+margin-left: 10px;
+margin-top: 0px;
+height: 18px;
+width: 35px;
+border: 0px;
+&:hover {
+    background-color: #61DAFB;
+    color:#16181D;
+}
+:active {
+    background-color: white;
+}
+}
+.maxdown {
+background-color: #16181D;
+color: #61DAFB;
+font-size: 15px;
+padding-bottom: 10px;
+padding-right: 10px;
+display: table-cell; 
+vertical-align: middle;
+font-weight: bold;
+margin-left: 10px;
+margin-top: 4px;
+height: 18px;
+width: 35px;
+border: 0px;
+&:hover {
+    background-color: #61DAFB;
+    color:#16181D;
+}
+:active {
+    background-color: white;
+}
+}
+.minup {
+background-color: #16181D;
+color: #61DAFB;
+font-size: 15px;
+padding-bottom: 10px;
+padding-right: 10px;
+display: table-cell; 
+vertical-align: middle;
+font-weight: bold;
+margin-left: 10px;
+margin-top: 0px;
+height: 18px;
+width: 35px;
+border: 0px;
+&:hover {
+    background-color: #61DAFB;
+    color:#16181D;
+}
+:active {
+    background-color: white;
+}
+}
+.mindown {
+background-color: #16181D;
+color: #61DAFB;
+font-size: 15px;
+padding-bottom: 10px;
+padding-right: 10px;
+display: table-cell; 
+vertical-align: middle;
+font-weight: bold;
+margin-left: 10px;
+margin-top: 4px;
+height: 18px;
+width: 35px;
+border: 0px;
+&:hover {
+    background-color: #61DAFB;
+    color:#16181D;
+}
+:active {
+    background-color: white;
+}
 }
 
 

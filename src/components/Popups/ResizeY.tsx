@@ -1,4 +1,4 @@
-
+import { useState } from 'react';
 import styled from 'styled-components'
 
 type chartProp = {
@@ -10,10 +10,6 @@ type chartProp = {
         };
         title: {
             text: string;
-        };
-        caption: {
-            text: string;
-            align: string;
         };
         subtitle: {
             text: string;
@@ -34,13 +30,16 @@ type chartProp = {
             }
             tickPositions: any;
         };
+        caption: {
+            text: string;
+            align: string;
+        };
         yAxis: {
             title: {
                 text: string;
             };
             min: number | null;
             max: number | null;
-            
           };
         series: {
             data: number[][];
@@ -106,65 +105,61 @@ type chartProp = {
         }[];
     } | undefined
 
-    setTitleView: React.Dispatch<React.SetStateAction<boolean>>
-    titleView: boolean
+    setChangeAxisView: React.Dispatch<React.SetStateAction<boolean>>
+    changeAxisView: boolean
 }
 
-const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
+
+
+const ResizeY = ({setOptions, options, changeAxisView, setChangeAxisView}: chartProp) => {
 
     
+
+   
+
     return (
-        <StyledPopup 
-        // onClick={(e) => {
-        //     e.preventDefault()
-        //     setTitleView(false)
-        // }} 
-        style={{display: titleView ? '' : 'none'}} >
-          <div  className='outer-div' >
-          <form>
-            <div><label>Test Type</label>
-            <input type={"text"} 
-                defaultValue={options?.title.text}
-                // value={options?.title.text} 
-                onChange={(e) => setOptions((curr) => {
-                    e.preventDefault()
-                    let newCurr = {...curr!}
-                    newCurr.title.text = e.target.value
-                    return newCurr
-    
-                })} />
-            </div>
-            <div><label>EUT Description</label>
-            <input type={"text"} 
-            defaultValue={options?.subtitle.text}
-            // value={options?.subtitle.text} 
-            onChange={(e) => setOptions((curr) => {
+    <StyledPopup 
+    // onClick={(e) => {
+    //     e.preventDefault()
+    //     setAxisLabelView(false)
+    // }} 
+    style={{display: changeAxisView ? '' : 'none'}} >
+      <div  className='outer-div' >
+      <form>
+        <div><label>Max</label>
+        <input type={"text"} 
+           defaultValue={options?.yAxis.max!} 
+        //    value={options?.yAxis.title.text} 
+           onChange={(e) => setOptions((curr) => {
                 e.preventDefault()
                 let newCurr = {...curr!}
-                newCurr.subtitle.text = e.target.value
+                newCurr.yAxis.max! = +e.target.value
                 return newCurr
-            })} /></div>
-            <div><label>Graph Information</label>
-            <input type={"text"} 
-            defaultValue={options?.caption.text}
-            // value={options?.caption.text} 
-            onChange={(e) => setOptions((curr) => {
-                let newCurr = {...curr!}
-                newCurr.caption.text = e.target.value
-                return newCurr
-            })} /></div>
-            <div><button onClick={(e) => {
-                e.preventDefault()
-                setTitleView(false)
-            }} >Close</button></div>
-          </form>
-          </div>
-        </StyledPopup>
-        )
 
+            })} />
+        </div>
+        <div><label>Min</label>
+        <input type={"text"} 
+        defaultValue={options?.yAxis.min!}
+        // value={options?.xAxis.title.text} 
+        onChange={(e) => setOptions((curr) => {
+            
+            let newCurr = {...curr!}
+            newCurr.yAxis.min! = +e.target.value
+            return newCurr
+        })} /></div>
+        <div><button onClick={(e) => {
+            e.preventDefault()
+            setChangeAxisView(false)
+        }} >Close</button></div>
+      </form>
+      </div>
+    </StyledPopup>
+    )
 }
 
-export default Title
+export default ResizeY
+
 
 const StyledPopup = styled.div`
 background-color: #0000008d;
@@ -182,13 +177,13 @@ top: 0;
   top: 200px;
   margin-left: auto; 
   margin-right: auto; 
-  width: 400px;
+  width: 300px;
   height: 200px;
   margin-left: auto;
   margin-right: auto;
   form {
     div{
-        margin-top: 20px;
+        margin-top: 30px;
         label {
             color: #61DAFB;
             font-weight: bold;
@@ -212,5 +207,6 @@ top: 0;
     }
   }
 }
+  /* display: none; */
 
 `

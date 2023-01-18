@@ -27,11 +27,18 @@ type chartProp = {
                 text: string;
             };
             type: string;
+            tickInterval: number;
+            labels: {
+                format: string;
+            }
+            tickPositions: any;
         };
         yAxis: {
             title: {
                 text: string;
             };
+            min: number | null;
+            max: number | null;
           };
         series: {
             data: number[][];
@@ -71,11 +78,18 @@ type chartProp = {
                 text: string;
             };
             type: string;
+            tickInterval: number;
+            labels: {
+                format: string;
+            }
+            tickPositions: any;
         };
         yAxis: {
             title: {
                 text: string;
             };
+            min: number | null;
+            max: number | null;
           };
         series: {
             data: number[][];
