@@ -111,12 +111,13 @@ type chartProp = {
         }[];
     } | undefined
     setFileCount: React.Dispatch<React.SetStateAction<number>>
-    
+    showChartBool: boolean
+    setShowChartBool: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
 
-const Upload = ({setOptions, options, setFileCount}: chartProp) => {
+const Upload = ({setOptions, options, setFileCount, showChartBool, setShowChartBool}: chartProp) => {
 
     const [dataSize, setDataSize] = useState<number>(0)
 
@@ -130,7 +131,7 @@ const Upload = ({setOptions, options, setFileCount}: chartProp) => {
                 reader.readAsText(file);
             });
         });
-    
+        setShowChartBool(true)
         let file: any = await Promise.all(files);        
         let firstData: number[][] = []
         let secondData: number[][] = []
@@ -297,15 +298,27 @@ const Upload = ({setOptions, options, setFileCount}: chartProp) => {
             setDataSize(1)
             setFileCount(0)
             setOptions(() => {
-                    if (+file[0].split('\n')[0].split('\t')[0] < 0.010) {
+                    if (+file[0].split('\n')[0].split('\t')[0] < 0.010) { // check for 0.009
                         chartOptions.xAxis.tickPositions = [-2.04575749056, -2, -1.69897000434,-1.52287874528 , -1.39794000867, -1.30102999566, -1.22184874962, -1.15490195999,  -1.09691001301, -1.04575749056, -1, -0.82390874094]
                         chartOptions.xAxis.labels.format = '{value:.3f}'     
                     }
+                    if (+file[0].split('\n')[0].split('\t')[0] > 0.14 && +file[0].split('\n')[0].split('\t')[0] < 0.16) {
+                        chartOptions.xAxis.tickPositions = [
+                            -0.82390874094, -1, -0.69897000433,
+                             -0.52287874528, -0.39794000867,
+                            -0.30102999566, -0.22184874961, 
+                            -0.15490195998, -0.096910013, 
+                            -0.04575749056, 0, 0.30102999566, 
+                            0.47712125472, 0.60205999132, 
+                            0.69897000433, 0.77815125038, 
+                            0.84509804001, 0.90308998699, 
+                            0.95424250943, 1, 
+                            1.30102999566, 1.47712125472]
+                        chartOptions.xAxis.labels.format = '{value:.2f}'                     
+                    }
                     chartOptions.yAxis.min = Math.floor(tempMin / 10) * 10       
                     chartOptions.yAxis.max = Math.ceil(tempMax / 10) * 10 
-                    console.log(chartOptions.yAxis.min);
-                    
-                    
+  
                     return chartOptions
                 })
             } else if (dataSize === 1) {
@@ -380,6 +393,20 @@ const Upload = ({setOptions, options, setFileCount}: chartProp) => {
                     chartOptions.xAxis.tickPositions = [-2.04575749056, -2, -1.69897000434,-1.52287874528 , -1.39794000867, -1.30102999566, -1.22184874962, -1.15490195999,  -1.09691001301, -1.04575749056, -1, -0.82390874094]
                     chartOptions.xAxis.labels.format = '{value:.3f}'     
                 }
+                if (+file[0].split('\n')[0].split('\t')[0] > 0.14 && +file[0].split('\n')[0].split('\t')[0] < 0.16) {
+                    chartOptions.xAxis.tickPositions = [
+                        -0.82390874094, -1, -0.69897000433,
+                         -0.52287874528, -0.39794000867,
+                        -0.30102999566, -0.22184874961, 
+                        -0.15490195998, -0.096910013, 
+                        -0.04575749056, 0, 0.30102999566, 
+                        0.47712125472, 0.60205999132, 
+                        0.69897000433, 0.77815125038, 
+                        0.84509804001, 0.90308998699, 
+                        0.95424250943, 1, 
+                        1.30102999566, 1.47712125472]
+                    chartOptions.xAxis.labels.format = '{value:.2f}'                     
+                }
                     chartOptions.series[1] = {
                         data: secondData, 
                         color: "#cf8b0c",
@@ -421,6 +448,20 @@ const Upload = ({setOptions, options, setFileCount}: chartProp) => {
                     chartOptions.xAxis.tickPositions = [-2.04575749056, -2, -1.69897000434,-1.52287874528 , -1.39794000867, -1.30102999566, -1.22184874962, -1.15490195999,  -1.09691001301, -1.04575749056, -1, -0.82390874094]
                     chartOptions.xAxis.labels.format = '{value:.3f}'     
                 }
+                if (+file[0].split('\n')[0].split('\t')[0] > 0.14 && +file[0].split('\n')[0].split('\t')[0] < 0.16) {
+                    chartOptions.xAxis.tickPositions = [
+                        -0.82390874094, -1, -0.69897000433,
+                         -0.52287874528, -0.39794000867,
+                        -0.30102999566, -0.22184874961, 
+                        -0.15490195998, -0.096910013, 
+                        -0.04575749056, 0, 0.30102999566, 
+                        0.47712125472, 0.60205999132, 
+                        0.69897000433, 0.77815125038, 
+                        0.84509804001, 0.90308998699, 
+                        0.95424250943, 1, 
+                        1.30102999566, 1.47712125472]
+                    chartOptions.xAxis.labels.format = '{value:.2f}'                     
+                }
                     chartOptions.series[1] = {
                         data: secondData, 
                         color: "#cf8b0c",
@@ -449,7 +490,13 @@ const Upload = ({setOptions, options, setFileCount}: chartProp) => {
 }
  
     return (
-            <StyledForm  >
+            <StyledForm style={
+                {
+                    width: showChartBool ? '55px' : '160px',
+                    height: showChartBool ? '40px' : '160px',
+                    fontSize: showChartBool ? '16px' : '60px'
+                }
+                } >
                <label htmlFor="filePicker" >Data<br></br>Files</label>
                  <input  onChange={(e) => readFile(e)} 
                 type="file" 

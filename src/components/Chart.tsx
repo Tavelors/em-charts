@@ -33,6 +33,7 @@ export default function Chart() {
   const [titleView, setTitleView] = useState<boolean>(false)
   const [dataKeysView, setDataKeysView] = useState<boolean>(false)
   const [changeAxisView, setChangeAxisView] = useState<boolean>(false)
+  const [showChartBool, setShowChartBool] = useState<boolean>(false)
   const [fileCount, setFileCount] = useState(0)
   const [peakCount, setPeakCount] = useState(0)
 
@@ -353,9 +354,14 @@ Highcharts.setOptions({
         
 
   return (
-    <div className="custom-chart"  >
+    <div   className="custom-chart"  >
       
-      
+      <StyledDivUpload  style={{display: showChartBool ? 'none' : ''}} className="first-upload" >
+      <Upload setOptions={setOptions} options={options}
+       setFileCount={setFileCount} 
+       showChartBool={showChartBool} setShowChartBool={setShowChartBool}
+      />
+      </StyledDivUpload>
       <HighchartsReact 
     id="chart-test"
     highcharts={Highcharts}
@@ -365,6 +371,7 @@ Highcharts.setOptions({
     redraw={false}
     Ref="chart"
     />
+    
     <AxisLabel setOptions={setOptions} options={options} 
     axisLabelView={axisLabelView} setAxisLabelView={setAxisLabelView} />
     <Title setOptions={setOptions} options={options}
@@ -373,7 +380,7 @@ Highcharts.setOptions({
     dataKeysView={dataKeysView} setDataKeysView={setDataKeysView} />
     <ResizeY setOptions={setOptions} options={options} 
     changeAxisView={changeAxisView} setChangeAxisView={setChangeAxisView} />
-    <StyledList>
+    <StyledList style={{display: showChartBool ? '' : 'none'}} >
       <li>
         <StyledDiv onMouseEnter={() => {
       setEditHover(true)
@@ -393,9 +400,10 @@ Highcharts.setOptions({
       <li className="shortcut" >
       <DataDrop setOptions={setOptions} options={options}  />
       </li>
-      <li className="upload" >
+      <li  style={{display: ''}} className="upload" >
       <Upload setOptions={setOptions} options={options}
        setFileCount={setFileCount}
+       showChartBool={showChartBool} setShowChartBool={setShowChartBool}
       />
       </li>
       <li className="limit" >
@@ -457,7 +465,7 @@ Highcharts.setOptions({
      
     </StyledList>
 
-    <button onClick={handleClickk} >cliccc</button>
+    {/* <button onClick={handleClickk} >cliccc</button> */}
     </div>
   );
 }
@@ -465,12 +473,24 @@ Highcharts.setOptions({
 // #16181D
 // #20232A
 
+const StyledDivUpload = styled.div `
+/* background-color: #16181D; */
+color: #61dafb;
+font-size: 15px;
+justify-content: center;
+position: absolute;
+left: 40%;
+margin-top: 20px;
+height: 200px;
+width: 200px;
+
+`
+
 const StyledList = styled.ul`
   
 display: flex;
 padding-inline-start: 0px;
 list-style-type: none;
-
 .upload {
 background-color: #16181D;
 color: #61DAFB;
