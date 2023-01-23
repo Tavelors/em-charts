@@ -29,13 +29,15 @@ require("highcharts/modules/exporting")(Highcharts);
 export default function Chart() {
 
   const [editHover, setEditHover] = useState<boolean>(false)
+  const [fileHover, setFileHover] = useState<boolean>(false)
   const [axisLabelView, setAxisLabelView] = useState<boolean>(false)
   const [titleView, setTitleView] = useState<boolean>(false)
   const [dataKeysView, setDataKeysView] = useState<boolean>(false)
   const [changeAxisView, setChangeAxisView] = useState<boolean>(false)
   const [showChartBool, setShowChartBool] = useState<boolean>(false)
-  const [fileCount, setFileCount] = useState(0)
-  const [peakCount, setPeakCount] = useState(0)
+  const [fileCount, setFileCount] = useState<number>(0)
+  const [peakCount, setPeakCount] = useState<number>(0)
+  const [dataSize, setDataSize] = useState<number>(0)
 
   const [options, setOptions] = useState<{
     plotOptions: {
@@ -358,8 +360,11 @@ Highcharts.setOptions({
       
       <StyledDivUpload  style={{display: showChartBool ? 'none' : ''}} className="first-upload" >
       <Upload setOptions={setOptions} options={options}
-       setFileCount={setFileCount} 
-       showChartBool={showChartBool} setShowChartBool={setShowChartBool}
+      setFileCount={setFileCount} 
+      showChartBool={showChartBool} 
+      setShowChartBool={setShowChartBool}
+      dataSize={dataSize} 
+      setDataSize={setDataSize}
       />
       </StyledDivUpload>
       <HighchartsReact 
@@ -397,26 +402,72 @@ Highcharts.setOptions({
       </ul>
     </StyledDiv>
     </li>
+    
       <li className="shortcut" >
-      <DataDrop setOptions={setOptions} options={options}  />
+      <DataDrop setOptions={setOptions} options={options} 
+      dataSize={dataSize} setDataSize={setDataSize}
+      />
       </li>
-      <li  style={{display: ''}} className="upload" >
+      <li>
+      <StyledDivFiles onMouseEnter={() => {
+      setFileHover(true)
+    }} onMouseLeave={() => setFileHover(false)}  >
+      Files
+      
+      <ul 
+      onMouseEnter={() => setFileHover(true)} 
+      style={{display: fileHover ? '' : 'none'}} className="main-div" >
+        <li>
+        <Upload setOptions={setOptions} options={options}
+      setFileCount={setFileCount}
+      showChartBool={showChartBool} 
+      setShowChartBool={setShowChartBool}
+      dataSize={dataSize} 
+      setDataSize={setDataSize}
+      />
+        </li>
+        <li>
+        <Limits setOptions={setOptions} options={options} 
+      fileCount={fileCount} setFileCount={setFileCount}
+      dataSize={dataSize} setDataSize={setDataSize}
+      />
+        </li>
+        <li>
+        <PeakFile setOptions={setOptions} options={options} 
+        peakCount={peakCount} setPeakCount={setPeakCount}
+      />
+        </li>
+      </ul>
+    </StyledDivFiles>
+      </li>
+      {/* <li  style={{display: ''}} className="upload" >
       <Upload setOptions={setOptions} options={options}
-       setFileCount={setFileCount}
-       showChartBool={showChartBool} setShowChartBool={setShowChartBool}
+      setFileCount={setFileCount}
+      showChartBool={showChartBool} 
+      setShowChartBool={setShowChartBool}
+      dataSize={dataSize} 
+      setDataSize={setDataSize}
       />
       </li>
       <li className="limit" >
       <Limits setOptions={setOptions} options={options} 
-        fileCount={fileCount} setFileCount={setFileCount}
+      fileCount={fileCount} setFileCount={setFileCount}
+      dataSize={dataSize} setDataSize={setDataSize}
       />
       </li>
       <li className="peakfile" >
       <PeakFile setOptions={setOptions} options={options} 
         peakCount={peakCount} setPeakCount={setPeakCount}
       />
-      </li>
+      </li> */}
       <li>
+        
+          <button className="reset"
+          onClick={() => window.location.reload()}
+          >Reset</button>
+          
+      </li>
+      <li className="arrow-max" >
         <div>
           <label className="maxlabel" >max</label>
         </div>
@@ -439,7 +490,7 @@ Highcharts.setOptions({
         }} >⬇</button>
         </div>
       </li>
-      <li>
+      <li className="arrow-min" >
       <div>
           <label className="minlabel" >min</label>
         </div>
@@ -472,31 +523,116 @@ Highcharts.setOptions({
 
 // #16181D
 // #20232A
-
-const StyledDivUpload = styled.div `
-/* background-color: #16181D; */
-color: #61dafb;
-font-size: 15px;
-justify-content: center;
-position: absolute;
-left: 40%;
+const StyledDivFiles = styled.div`
+background-color: #16181D;
+color: #61DAFB;
+font-weight: bold;
+height: 30px;
+padding-top: 10px;
+width: 100px;
+margin-left: 10px;
 margin-top: 20px;
-height: 200px;
-width: 200px;
 
-`
-
-const StyledList = styled.ul`
+ul {
+  margin-top: 9px;
+  list-style-type: none;
+  padding-left: 0px;
+  /* margin-right: 80%; */
+  background-color: blue;
+  li {
+    width: 98px;
+    border: 1px solid #121212;
   
-display: flex;
-padding-inline-start: 0px;
-list-style-type: none;
-.upload {
+    .upload {
+background-color: #16181D;
+color: #61DAFB;
+margin-left: 10px;
+margin-top: 20px;
+margin-right: 10px;
+height: 30px;
+width: 90px;
+}
+.limit {
 background-color: #16181D;
 color: #61DAFB;
 margin-left: 10px;
 margin-top: 20px;
 height: 36px;
+}
+.peakfile {
+background-color: #16181D;
+color: #61DAFB;
+margin-left: 10px;
+margin-top: 20px;
+height: 36px;
+}
+  }
+
+}
+
+
+`
+
+const StyledDivUpload = styled.div `
+/* background-color: #16181D; */
+display: flex;
+color: #61dafb;
+font-size: 15px;
+justify-content: center;
+/* position: absolute; */
+text-align: center;
+/* left: 50%; */
+margin-left: auto;
+margin-right: auto;
+margin-top: 100px;
+/* margin-left: auto; */
+height: 200px;
+/* width: 200px; */
+
+`
+
+const StyledList = styled.ul`
+.reset {
+  background-color: #16181D;
+color: #61DAFB;
+font-size: 16px;
+/* padding-bottom: 10px; */
+padding-right: 5px;
+font-weight: bold;
+margin-left: 10px;
+margin-top: 20px;
+height: 40px;
+width: 70px;
+border: 0px;
+&:hover {
+    background-color: #61DAFB;
+    color:#16181D;
+}
+:active {
+    background-color: white;
+}
+}
+
+.arrow-max {
+  margin-top: 6px;
+}
+.arrow-min {
+  margin-top: 6px;
+}
+
+display: flex;
+padding-inline-start: 0px;
+list-style-type: none;
+background-color: #282C34;
+padding-bottom: 10px;
+.upload {
+background-color: #16181D;
+color: #61DAFB;
+margin-left: 10px;
+margin-top: 20px;
+margin-right: 10px;
+height: 30px;
+width: 50px;
 }
 .limit {
 background-color: #16181D;
@@ -525,9 +661,9 @@ margin-left: 8px;
 .maxup {
 background-color: #16181D;
 color: #61DAFB;
-font-size: 15px;
+font-size: 10px;
 padding-bottom: 10px;
-padding-right: 10px;
+padding-right: 5px;
 display: table-cell; 
 vertical-align: middle;
 font-weight: bold;
@@ -547,9 +683,9 @@ border: 0px;
 .maxdown {
 background-color: #16181D;
 color: #61DAFB;
-font-size: 15px;
+font-size: 10px;
 padding-bottom: 10px;
-padding-right: 10px;
+padding-right: 5px;
 display: table-cell; 
 vertical-align: middle;
 font-weight: bold;
@@ -569,9 +705,9 @@ border: 0px;
 .minup {
 background-color: #16181D;
 color: #61DAFB;
-font-size: 15px;
+font-size: 10px;
 padding-bottom: 10px;
-padding-right: 10px;
+padding-right: 5px;
 display: table-cell; 
 vertical-align: middle;
 font-weight: bold;
@@ -591,9 +727,9 @@ border: 0px;
 .mindown {
 background-color: #16181D;
 color: #61DAFB;
-font-size: 15px;
+font-size: 10px;
 padding-bottom: 10px;
-padding-right: 10px;
+padding-right: 5px;
 display: table-cell; 
 vertical-align: middle;
 font-weight: bold;
@@ -624,7 +760,7 @@ margin-left: 30px;
 margin-top: 20px;
 
 ul {
-  margin-top: 11px;
+  margin-top: 9px;
   list-style-type: none;
   padding-left: 0px;
   /* margin-right: 80%; */

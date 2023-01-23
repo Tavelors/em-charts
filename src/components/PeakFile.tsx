@@ -132,13 +132,20 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
     });
 
     let file: any = await Promise.all(files);
-
+    let tempMax:number = +file[0].split('\n')[0].split('\t')[1]  
+    let tempMin:number = +file[0].split('\n')[0].split('\t')[1]
+    
     
     let fileSplit = file[0].split('\n')
     for(let i=0; i<fileSplit.length; i++) {
         if (fileSplit[i] !== "") {
             console.log(fileSplit[i].split('\t'));
-            
+            if (+fileSplit[i].split('\t')[1] > tempMax) {
+                tempMax = +fileSplit[i].split('\t')[1]
+            }
+            if (+fileSplit[i].split('\t')[1] < tempMin) {
+                tempMin = +fileSplit[i].split('\t')[1]
+            }
             if (fileSplit[i].includes("PEAK POS")) {
                 posPeak.push([+fileSplit[i].split('\t')[0], +fileSplit[i].split('\t')[1]])
             } else if (fileSplit[i].includes("QP")) {
@@ -165,10 +172,16 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
                     width: 20,
                   },
                 data: posPeak,
-                color: "white", 
+                color: "transparent", 
                 type: "scatter",
                 name: "Peak (dB)",     
         })
+        if (newOptions.yAxis.max! < tempMax) {
+            newOptions.yAxis.max = (tempMax += 10)
+        }
+        if (newOptions.yAxis.min! > tempMin) {
+            newOptions.yAxis.min = (tempMin -= 10)
+        }
             return currOptions
         })
         setPeakCount(1)
@@ -184,10 +197,16 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
                     
                   },
                 data: averagePeak,
-                color: "white", 
+                color: "transparent", 
                 type: "scatter",
                 name: "AV Peaks (dB)",     
-        })
+        })  
+        if (newOptions.yAxis.max! < tempMax) {
+            newOptions.yAxis.max = (tempMax += 10)
+        }
+        if (newOptions.yAxis.min! > tempMin) {
+            newOptions.yAxis.min = (tempMin -= 10)
+        }
             return currOptions
         })
         setPeakCount(1)
@@ -203,10 +222,16 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
                     width: 20,
                   },
                 data: quasiPeak,
-                color: "white", 
+                color: "transparent", 
                 type: "scatter",
                 name: "Q Peaks (dB)",     
-        })
+        })  
+        if (newOptions.yAxis.max! < tempMax) {
+            newOptions.yAxis.max = (tempMax += 10)
+        }
+        if (newOptions.yAxis.min! > tempMin) {
+            newOptions.yAxis.min = (tempMin -= 10)
+        }  
             return currOptions
         })
         setPeakCount(1)
@@ -219,7 +244,7 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
 
     return (
         <StyledForm  >
-        <label htmlFor="peakFile" >Peak<br></br>File</label>
+        <label htmlFor="peakFile" >Peak File</label>
         <input  onChange={(e) => readFile(e)} 
         type="file" 
         multiple 
@@ -234,15 +259,15 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
 export default PeakFile
 
 const StyledForm = styled.form `
-
-background-color: #16181D;
+padding-top: 10px;
+background-color: #20232A;
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: flex-start;
 /* border: 2px solid #121212; */
-height: 40px;
-width: 55px;
+height: 35px;
+width: 98px;
 
 
 &:hover {

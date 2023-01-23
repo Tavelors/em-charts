@@ -113,13 +113,17 @@ type chartProp = {
     setFileCount: React.Dispatch<React.SetStateAction<number>>
     showChartBool: boolean
     setShowChartBool: React.Dispatch<React.SetStateAction<boolean>>
+    dataSize: number
+    setDataSize: React.Dispatch<React.SetStateAction<number>>
 }
 
 
 
-const Upload = ({setOptions, options, setFileCount, showChartBool, setShowChartBool}: chartProp) => {
+const Upload = ({setOptions, options, setFileCount, 
+    showChartBool, setShowChartBool, dataSize, setDataSize,
+}: chartProp) => {
 
-    const [dataSize, setDataSize] = useState<number>(0)
+    
 
     const readFile = async (e: any) => {
         e.preventDefault()
@@ -142,7 +146,7 @@ const Upload = ({setOptions, options, setFileCount, showChartBool, setShowChartB
                 chartOptions = {
                     chart: {
                         height: 600,
-                        type: "line",
+                        type: "scatter",
                         marginBottom: 180,
                         marginTop: 90,
                     },
@@ -492,12 +496,17 @@ const Upload = ({setOptions, options, setFileCount, showChartBool, setShowChartB
     return (
             <StyledForm style={
                 {
-                    width: showChartBool ? '55px' : '160px',
-                    height: showChartBool ? '40px' : '160px',
-                    fontSize: showChartBool ? '16px' : '60px'
+                    width: showChartBool ? '98px' : '500px',
+                    height: showChartBool ? '30px' : '45px',
+                    fontSize: showChartBool ? '16px' : '50px',
+                    backgroundColor: showChartBool ? '' : '#282C34',
+                    // paddingTop: showChartBool ? '10px' : '3px',
                 }
-                } >
-               <label htmlFor="filePicker" >Data<br></br>Files</label>
+                } 
+                
+                >
+               <label className="upload-button" style={{display: showChartBool ? '' : 'none'}} htmlFor="filePicker" >Data Files</label>
+               <label className="insert-data" style={{display: showChartBool ? 'none' : ''}} htmlFor="filePicker" >Upload Data File</label>
                  <input  onChange={(e) => readFile(e)} 
                 type="file" 
                 multiple 
@@ -511,14 +520,13 @@ const Upload = ({setOptions, options, setFileCount, showChartBool, setShowChartB
 export default Upload
 
 const StyledForm = styled.form`
-background-color: #16181D;
-display: flex;
+background-color: #20232A;
+/* display: flex;
 flex-direction: column;
 justify-content: center;
-align-items: flex-start;
+align-items: flex-start;  */
 /* border: 2px solid #121212; */
-height: 40px;
-width: 55px;
+padding-top: 10px;
 
 
 &:hover {
@@ -531,10 +539,26 @@ width: 55px;
     background-color: white;
 }
 
+
 label {
     cursor: pointer;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     margin-top: 3px;
     font-weight: bold;
+    
+    
+}
+.insert-data {
+  border: 1px solid #61DAFB;
+  border-radius: 5px;
+  padding: 5px;
+  padding-bottom: 10px;
+  width: 450px;
+ 
+
+  &:hover {
+    border: 1px solid #16181D;
+    background-color: #61DAFB;
+  }
 }
 `

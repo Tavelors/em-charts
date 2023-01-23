@@ -104,9 +104,11 @@ type chartProp = {
             }
         }[];
     } | undefined
+    dataSize: number
+    setDataSize: React.Dispatch<React.SetStateAction<number>>
 }
 
-const DataDrop = ({setOptions, options}: chartProp) => {
+const DataDrop = ({setOptions, options, dataSize, setDataSize}: chartProp) => {
 
     const [displayDrop, setDisplayDrop] = useState<Boolean>(false)
 
@@ -116,6 +118,8 @@ const DataDrop = ({setOptions, options}: chartProp) => {
             newOptions.series[3].data = [[0.009, 110], [0.05, 110],[0.05,90], [0.15,80]]
             newOptions.series[3].name = "Quasi-Peak Limit"
             newOptions.series[3].color = "red"
+            if (newOptions.yAxis.max! <= 110) newOptions.yAxis.max = 120
+            if (newOptions.yAxis.min! >= 80) newOptions.yAxis.max = 70
             return newOptions
         })
     }
@@ -134,7 +138,7 @@ const DataDrop = ({setOptions, options}: chartProp) => {
     const buttonThree = () => {
         setOptions((currOptions) => {
             let newOptions = {...currOptions!}
-            newOptions.series[3].data = [[0.009, 110], [0.05, 110],[0.05,90], [0.15,80]]
+            newOptions.series[3].data = [[30, 30], [230, 30],[230, 37], [1000,37]]
             newOptions.series[3].name = "Quasi-Peak Limit"
             newOptions.series[3].color = "red"
             return newOptions
@@ -184,7 +188,7 @@ margin-left: 10px;
 margin-top: 20px;
 
 ul {
-  margin-top: 11px;
+  margin-top: 9px;
   margin-right: 50px;
   list-style-type: none;
   padding-left: 0px;

@@ -106,9 +106,11 @@ type chartProp = {
     } | undefined
     setFileCount: React.Dispatch<React.SetStateAction<number>>
     fileCount: number
+    dataSize: number
+    setDataSize: React.Dispatch<React.SetStateAction<number>>
 }
 
-const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
+const Limits = ({setOptions, options, fileCount, setFileCount, dataSize, setDataSize}: chartProp) => {
 
     
     // const [FirstFileData, setFirstFileData] = useState<number[][]>([])
@@ -278,16 +280,39 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
             reader.readAsText(file);
         });
     });
-
-    let file: any = await Promise.all(files);
     
+    let file: any = await Promise.all(files);
+    let tempSplit = file[0].split('\n')
+    let tempMax = +tempSplit[1].split(';')[1]
+    let tempMin = +tempSplit[1].split(';')[1]
+
+
+    for(let i=0; i<file.length; i++){
+        for(let j=1; j<file[i].split('\n').length; j++) {
+            console.log(+file[i].split('\n')[j].split(';')[1]);
+            if (+file[i].split('\n')[j].split(';')[1] > tempMax && file[i].split('\n')[j].split(';')[1] !== "") {
+                tempMax = +file[i].split('\n')[j].split(';')[1]
+                
+            }
+            if (+file[i].split('\n')[j].split(';')[1] < tempMin && tempSplit[i].split(';')[1] !== "") {
+                tempMin = +file[i].split('\n')[j].split(';')[1]
+                
+            }
+        }
+    }
+
+    console.log("after set", tempMax, tempMin);
+    
+    
+
     if (file.length === 1) {  
+
+
         if (fileCount < 1) {
            
-            
-            
             const fileArray:string = file[0].split("\n")
             const limitName = fileArray[0]
+
             for(let i=1; i<fileArray.length; i++) {
                 if(fileArray[i] !== "") {
                     firstfileData.push([+fileArray[i].split(';')[0], +fileArray[i].split(';')[1]])
@@ -299,8 +324,7 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
         setOptions((currOptions) => {  
              
             let newOptions = {...currOptions!}  
-            
-              
+
             newOptions.series[3] = {
                 data: firstfileData,
                 color: "red", 
@@ -313,12 +337,21 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
                 }
             }
                 counter++
+            if (newOptions.yAxis.max! < tempMax) {
+                newOptions.yAxis.max = (tempMax += 10)
+            }
+            if (newOptions.yAxis.min! > tempMin) {
+                newOptions.yAxis.min = (tempMin -= 10)
+            }
+            
             return newOptions
             })
         
         } else if (fileCount === 1) {
             
-
+            console.log("here");
+            console.log(tempMax, tempMin);
+            
             const fileArray:string = file[0].split("\n")
             const limitName = fileArray[0]
             for(let i=1; i<fileArray.length; i++) {
@@ -326,7 +359,7 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
                     firstfileData.push([+fileArray[i].split(';')[0], +fileArray[i].split(';')[1]])
             }
         }
-        setFileCount(2)
+        
         setOptions((currOptions) => {  
            
             let newOptions = {...currOptions!}   
@@ -341,8 +374,19 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
                     height: 20,
                 }
             }  
+            console.log(newOptions.yAxis.max!, newOptions.yAxis.min!);
+            
+            if (newOptions.yAxis.max! < tempMax) {
+                newOptions.yAxis.max = (tempMax += 10)
+            }
+            if (newOptions.yAxis.min! > tempMin) {
+                newOptions.yAxis.min = (tempMin -= 10)
+            }
+            
+            console.log(newOptions.yAxis.max!, newOptions.yAxis.min!);
             return newOptions
             })
+            setFileCount(2)
         } else if (fileCount === 2) {
             const fileArray:string = file[0].split("\n")
             const limitName = fileArray[0]
@@ -366,7 +410,18 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
                     height: 20,
                 }
             }  
+
+           
+
+            if (newOptions.yAxis.max! < tempMax) {
+                newOptions.yAxis.max = (tempMax += 10)
+            }
+            if (newOptions.yAxis.min! > tempMin) {
+                newOptions.yAxis.min = (tempMin -= 10)
+            }
+            
             return newOptions
+            
             })
         }
             
@@ -408,6 +463,12 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
                     width: 20,
                     height: 20,
                 }
+            }
+            if (newOptions.yAxis.max! < tempMax) {
+                newOptions.yAxis.max = (tempMax += 10)
+            }
+            if (newOptions.yAxis.min! > tempMin) {
+                newOptions.yAxis.min = (tempMin -= 10)
             }
             return newOptions
         })
@@ -464,6 +525,12 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
                     height: 20,
                 }
             }
+            if (newOptions.yAxis.max! < tempMax) {
+                newOptions.yAxis.max = (tempMax += 10)
+            }
+            if (newOptions.yAxis.min! > tempMin) {
+                newOptions.yAxis.min = (tempMin -= 10)
+            }
             return newOptions
         })
     } else if (file.length > 3) {
@@ -483,8 +550,8 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
 
     return (
         <StyledForm  >
-               <label htmlFor="filePick" >Limit<br></br>Files</label>
-                 <input  onChange={(e) => readFile(e)} 
+               <label htmlFor="filePick" >Limit Files</label>
+                 <input accept='.limit'  onChange={(e) => readFile(e)} 
                 type="file" 
                 multiple 
                 id="filePick"
@@ -495,15 +562,15 @@ const Limits = ({setOptions, options, fileCount, setFileCount}: chartProp) => {
 }
 
 const StyledForm = styled.form `
-
-background-color: #16181D;
+padding-top: 10px;
+background-color: #20232A;
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: flex-start;
 /* border: 2px solid #121212; */
-height: 40px;
-width: 55px;
+height: 35px;
+width: 98px;
 
 
 &:hover {
