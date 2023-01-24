@@ -58,6 +58,12 @@ type chartProp = {
                 width: number;
             }
         }[];
+        exporting: {
+            sourceWidth: number;
+            sourceHeight: number;
+            allowHTML: boolean;
+            filename: string;
+        };
     } | undefined>>
     options: {
         plotOptions: {
@@ -109,6 +115,12 @@ type chartProp = {
                 width: number;
             }
         }[];
+        exporting: {
+            sourceWidth: number;
+            sourceHeight: number;
+            allowHTML: boolean;
+            filename: string;
+        };
     } | undefined
     setFileCount: React.Dispatch<React.SetStateAction<number>>
     showChartBool: boolean
@@ -158,7 +170,7 @@ const Upload = ({setOptions, options, setFileCount,
                     title: {text: "Conducted / Radiated Emissions (Class A/B)",
                      align: "left",
                      style: {
-                        "font-size" : "40px",
+                        "font-size" : "20px",
                         "marginTop" : "10px"
                      },
                      y: 30,
@@ -182,18 +194,32 @@ const Upload = ({setOptions, options, setFileCount,
                         y: 60,
                       },
                     xAxis: {                   // normal xAxis object
-                        title: {text: "Frequency (Mhz)"},
+                        title: {text: "Frequency (Mhz)", style: {fontSize: 10}},
                         type: 'logarithmic',
                         showLastLabel: true,
                         showFirstLabel: true,
                         tickInterval: 0.1,
                         labels: {
-                                format: ''
+                                format: '',
+                                style: {
+                                    fontSize: 7,
+                                    fontWeight: "bold"
+                                }
                         },
+                        gridLineWidth: 1,
+                        lineWidth: 1,
                         tickPositions: undefined,
                     },
                     yAxis: {
-                        title: {text: "Emissions level (dBuV)"},
+                        title: {text: "Emissions level (dBuV)", style: {fontSize: 10}},
+                        gridLineWidth: 1,
+                        lineWidth: 1,
+                        labels: {
+                            style: {
+                                fontSize: 7,
+                                fontWeight: "bold"
+                            }
+                        }
                         
 
                     },
@@ -204,14 +230,16 @@ const Upload = ({setOptions, options, setFileCount,
                         alignColumns: false,
                         title: {
                             text: "Keys",
+                            style: {fontSize: 10}
                         },
                         x:0,
                         y:10,
                     },
                     exporting: {
-                        sourceWidth: 1920,
-                        sourceHeight: 1080,
-                        allowHTML: true
+                        sourceWidth: 800,
+                        sourceHeight: 500,
+                        allowHTML: true,
+                        filename: "File Name"
                     },
                     series: [{
                         data: firstData, 

@@ -51,6 +51,12 @@ type chartProp = {
                 width: number;
             }
         }[];
+        exporting: {
+            sourceWidth: number;
+            sourceHeight: number;
+            allowHTML: boolean;
+            filename: string;
+        };
     } | undefined>>
     options: {
         plotOptions: {
@@ -102,6 +108,12 @@ type chartProp = {
                 width: number;
             }
         }[];
+        exporting: {
+            sourceWidth: number;
+            sourceHeight: number;
+            allowHTML: boolean;
+            filename: string;
+        };
     } | undefined
 
     setDataKeysView: React.Dispatch<React.SetStateAction<boolean>>

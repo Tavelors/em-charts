@@ -17,6 +17,7 @@ import DataDrop from "./DataDrop";
 import quasi from '../images/quasi.png'
 import peak from '../images/peak.png'
 import average from '../images/average.png'
+import FileName from "./Popups/FileName";
 // import HC_more from 'highcharts/highcharts-more';
 // HC_more(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
@@ -34,6 +35,7 @@ export default function Chart() {
   const [titleView, setTitleView] = useState<boolean>(false)
   const [dataKeysView, setDataKeysView] = useState<boolean>(false)
   const [changeAxisView, setChangeAxisView] = useState<boolean>(false)
+  const [changeFileName, setChangeFileName] = useState<boolean>(false)
   const [showChartBool, setShowChartBool] = useState<boolean>(false)
   const [fileCount, setFileCount] = useState<number>(0)
   const [peakCount, setPeakCount] = useState<number>(0)
@@ -89,6 +91,12 @@ export default function Chart() {
           width: number;
       }
     }[];
+    exporting: {
+      sourceWidth: number;
+      sourceHeight: number;
+      allowHTML: boolean;
+      filename: string;
+  };
 }>()
 
 
@@ -149,6 +157,7 @@ Highcharts.setOptions({
             x: 0,
             y: 40,
           },
+          
           
         series: [{data: realData, color: "#10c053", 
           description: "Data", 
@@ -338,10 +347,11 @@ Highcharts.setOptions({
           },
           
           exporting: {
-            sourceWidth: 1920,
-            sourceHeight: 1080,
-            allowHTML: true
-          }
+            sourceWidth: 800,
+            sourceHeight: 500,
+            allowHTML: true,
+            filename: "File Name"
+        },
           
         }
         
@@ -385,6 +395,8 @@ Highcharts.setOptions({
     dataKeysView={dataKeysView} setDataKeysView={setDataKeysView} />
     <ResizeY setOptions={setOptions} options={options} 
     changeAxisView={changeAxisView} setChangeAxisView={setChangeAxisView} />
+    <FileName setOptions={setOptions} options={options}
+    changeFileName={changeFileName} setChangeFileName={setChangeFileName} />
     <StyledList style={{display: showChartBool ? '' : 'none'}} >
       <li>
         <StyledDiv onMouseEnter={() => {
@@ -399,6 +411,7 @@ Highcharts.setOptions({
         <li><button onClick={() => setDataKeysView(true)} >Data Labels</button></li>
         <li><button onClick={() => setAxisLabelView(true)} >Axis Labels</button></li>
         <li><button onClick={() => setChangeAxisView(true)} >Change YAxis</button></li>
+        <li><button onClick={() => setChangeFileName(true)} >FileName</button></li>
       </ul>
     </StyledDiv>
     </li>

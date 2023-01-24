@@ -55,6 +55,12 @@ type chartProp = {
                 width: number;
             }
         }[];
+        exporting: {
+            sourceWidth: number;
+            sourceHeight: number;
+            allowHTML: boolean;
+            filename: string;
+        };
     } | undefined>>
     options: {
         plotOptions: {
@@ -106,6 +112,12 @@ type chartProp = {
                 width: number;
             }
         }[];
+        exporting: {
+            sourceWidth: number;
+            sourceHeight: number;
+            allowHTML: boolean;
+            filename: string;
+        };
     } | undefined
     peakCount: number
     setPeakCount: React.Dispatch<React.SetStateAction<number>>
@@ -168,8 +180,8 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
             newOptions.series.push({
                 marker: {
                     symbol: `url(${peak})`,
-                    height: 20,
-                    width: 20,
+                    height: 10,
+                    width: 10,
                   },
                 data: posPeak,
                 color: "transparent", 
@@ -192,8 +204,8 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
             newOptions.series.push({
                 marker: {
                     symbol: `url(${average})`,
-                    height: 20,
-                    width: 20,
+                    height: 10,
+                    width: 10,
                     
                   },
                 data: averagePeak,
@@ -218,8 +230,8 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
             newOptions.series.push({
                 marker: {
                     symbol: `url(${quasi})`,
-                    height: 20,
-                    width: 20,
+                    height: 10,
+                    width: 10,
                   },
                 data: quasiPeak,
                 color: "transparent", 

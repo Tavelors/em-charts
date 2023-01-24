@@ -118,11 +118,11 @@ type chartProp = {
         };
     } | undefined
 
-    setTitleView: React.Dispatch<React.SetStateAction<boolean>>
-    titleView: boolean
+    setChangeFileName: React.Dispatch<React.SetStateAction<boolean>>
+    changeFileName: boolean
 }
 
-const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
+const FileName = ({setOptions, options, changeFileName, setChangeFileName}: chartProp) => {
 
     
     return (
@@ -131,43 +131,24 @@ const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
         //     e.preventDefault()
         //     setTitleView(false)
         // }} 
-        style={{display: titleView ? '' : 'none'}} >
+        style={{display: changeFileName ? '' : 'none'}} >
           <div  className='outer-div' >
           <form>
-            <div><label>Test Type</label>
+            <div><label>File Name</label>
             <input type={"text"} 
-                defaultValue={options?.title.text}
+                defaultValue={options?.exporting.filename}
                 // value={options?.title.text} 
                 onChange={(e) => setOptions((curr) => {
                     e.preventDefault()
                     let newCurr = {...curr!}
-                    newCurr.title.text = e.target.value
+                    newCurr.exporting.filename = e.target.value
                     return newCurr
     
                 })} />
             </div>
-            <div><label>EUT Description</label>
-            <input type={"text"} 
-            defaultValue={options?.subtitle.text}
-            // value={options?.subtitle.text} 
-            onChange={(e) => setOptions((curr) => {
-                e.preventDefault()
-                let newCurr = {...curr!}
-                newCurr.subtitle.text = e.target.value
-                return newCurr
-            })} /></div>
-            <div><label>Graph Information</label>
-            <input type={"text"} 
-            defaultValue={options?.caption.text}
-            // value={options?.caption.text} 
-            onChange={(e) => setOptions((curr) => {
-                let newCurr = {...curr!}
-                newCurr.caption.text = e.target.value
-                return newCurr
-            })} /></div>
             <div><button onClick={(e) => {
                 e.preventDefault()
-                setTitleView(false)
+                setChangeFileName(false)
             }} >Close</button></div>
           </form>
           </div>
@@ -176,7 +157,7 @@ const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
 
 }
 
-export default Title
+export default FileName
 
 const StyledPopup = styled.div`
 background-color: #0000008d;
@@ -194,14 +175,11 @@ top: 0;
   top: 200px;
   margin-left: auto; 
   margin-right: auto; 
-  width: 600px;
-  height: 200px;
+  width: 400px;
+  height: 150px;
   margin-left: auto;
   margin-right: auto;
   form {
-    input {
-        width: 400px;
-    }
     div{
         margin-top: 20px;
         label {
