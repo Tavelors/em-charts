@@ -160,9 +160,33 @@ const DataDrop = ({setOptions, options, dataSize, setDataSize}: chartProp) => {
         setOptions((currOptions) => {
             let newOptions = {...currOptions!}
             newOptions.series[3].data = [[1000, 70], [3000, 70],[3000, 74], [6000, 74]]
-            newOptions.series[3].name = "Quasi-Peak Limit"
+            newOptions.series[3].name = "Peak Limit"
             newOptions.series[3].color = "red"
             newOptions.series[4].data = [[1000, 50], [3000, 50],[3000, 54], [6000, 54]]
+            newOptions.series[4].name = "Average Peak Limit"
+            newOptions.series[4].color = "blue"
+            return newOptions
+        })
+    }
+    const buttonFive = () => {
+        setOptions((currOptions) => {
+            let newOptions = {...currOptions!}
+            newOptions.series[3].data = [[0.15, 79], [0.5, 79],[0.5, 73], [30, 73]]
+            newOptions.series[3].name = "Quasi-Peak Limit"
+            newOptions.series[3].color = "red"
+            newOptions.series[4].data = [[0.15, 66], [0.5, 66],[0.5, 60], [30, 60]]
+            newOptions.series[4].name = "Average Peak Limit"
+            newOptions.series[4].color = "blue"
+            return newOptions
+        })
+    }
+    const buttonSix = () => {
+        setOptions((currOptions) => {
+            let newOptions = {...currOptions!}
+            newOptions.series[3].data = [[0.15, 79], [0.5, 79],[0.5, 73], [30, 73]]
+            newOptions.series[3].name = "Quasi-Peak Limit"
+            newOptions.series[3].color = "red"
+            newOptions.series[4].data = [[0.15, 66], [0.5, 66],[0.5, 60], [30, 60]]
             newOptions.series[4].name = "Average Peak Limit"
             newOptions.series[4].color = "blue"
             return newOptions
@@ -179,9 +203,11 @@ const DataDrop = ({setOptions, options, dataSize, setDataSize}: chartProp) => {
             
             style={{display: displayDrop ? '' : 'none'}} className="main-div" >
               <li><button onClick={buttonOne} >Conducted Luminaires EN55015 (low range) (0.009 MHz to 0.15 MHz)</button></li>
-              <li><button onClick={buttonTwo} >Conducted AC EN55032 (0.15 MHz to 30 MHz) (Class B)</button></li>
-              <li><button onClick={buttonThree} >Radiated EN55032 (30 MHz to 1000 MHz) (Class B)</button></li>
-              <li><button onClick={buttonFour} >Radiated EN55032 Microwave (1000 MHz to 6000 MHz) (Class B)</button></li>
+              <li><button onClick={buttonTwo} >Conducted AC CISPR 16 (0.15 MHz to 30 MHz) (Class B)</button></li>
+              <li><button onClick={buttonFive} >Conducted AC CISPR 16 (0.15 MHz to 30 MHz) (Class A)</button></li>
+              <li><button onClick={buttonSix} >Conducted DC CISPR 16 (0.15 MHz to 30 MHz) (Class B)</button></li>
+              <li><button onClick={buttonThree} >Radiated CISPR 16 (30 MHz to 1000 MHz) (Class B)</button></li>
+              <li><button onClick={buttonFour} >Radiated CISPR 16 Microwave (1000 MHz to 6000 MHz) (Class B)</button></li>
             </ul>
           </StyledDiv>
     )
@@ -197,7 +223,7 @@ height: 30px;
 padding-top: 10px;
 width: 200px;
 margin-left: 10px;
-margin-top: 20px;
+/* margin-top: 20px; */
 
 ul {
   margin-top: 9px;

@@ -151,7 +151,6 @@ const PeakFile = ({setOptions, options, peakCount, setPeakCount}: chartProp) => 
     let fileSplit = file[0].split('\n')
     for(let i=0; i<fileSplit.length; i++) {
         if (fileSplit[i] !== "") {
-            console.log(fileSplit[i].split('\t'));
             if (+fileSplit[i].split('\t')[1] > tempMax) {
                 tempMax = +fileSplit[i].split('\t')[1]
             }

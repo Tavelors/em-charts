@@ -129,7 +129,10 @@ type chartProp = {
     setDataSize: React.Dispatch<React.SetStateAction<number>>
 }
 
-
+export const test = () => {
+    console.log("hi");
+    
+}
 
 const Upload = ({setOptions, options, setFileCount, 
     showChartBool, setShowChartBool, dataSize, setDataSize,
@@ -186,7 +189,7 @@ const Upload = ({setOptions, options, setFileCount,
                     subtitle: {
                         text: `Manufacturer name - Product name`, 
                         align: "left",
-                        useHTML: true,
+                        
                         style: {
                             "font-size" : "20px"
                         },
@@ -236,11 +239,24 @@ const Upload = ({setOptions, options, setFileCount,
                         y:10,
                     },
                     exporting: {
-                        sourceWidth: 800,
+                        sourceWidth: 900,
                         sourceHeight: 500,
                         allowHTML: true,
-                        filename: "File Name"
+                        filename: "File Name",
+                        buttons: {
+                            contextButton: {
+                                onclick: () => {
+                                    console.log("hello");
+                                    
+                                }
+                            }
+                        }
                     },
+                    credits: {
+                        text: "Cassindustries.com",
+                        href: "https://www.cassindustries.com/",
+                        
+                      },
                     series: [{
                         data: firstData, 
                         pointStart: 1,
@@ -248,6 +264,7 @@ const Upload = ({setOptions, options, setFileCount,
                         type: 'line',
                         name: '1st',
                         marker: {
+                            enabled: false,
                             symbol: "triangle",
                             width: 20,
                             height: 20,
@@ -259,6 +276,7 @@ const Upload = ({setOptions, options, setFileCount,
                         type: 'line',
                         name: '',
                         marker: {
+                            enabled: false,
                             symbol: "square",
                             width: 20,
                             height: 20,
@@ -270,6 +288,7 @@ const Upload = ({setOptions, options, setFileCount,
                         type: 'line',
                         name: '',
                         marker: {
+                            enabled: false,
                             symbol: "circle",
                             width: 20,
                             height: 20,
@@ -281,6 +300,7 @@ const Upload = ({setOptions, options, setFileCount,
                         type: 'line',
                         name: '',
                         marker: {
+                            enabled: false,
                             symbol: "diamond",
                             width: 20,
                             height: 20,
@@ -292,6 +312,7 @@ const Upload = ({setOptions, options, setFileCount,
                         type: 'line',
                         name: '',
                         marker: {
+                            enabled: false,
                             symbol: "triangle-down",
                             width: 20,
                             height: 20,
@@ -303,13 +324,14 @@ const Upload = ({setOptions, options, setFileCount,
                         type: 'line',
                         name: '',
                         marker: {
+                            enabled: false,
                             symbol: "triangle",
                             width: 20,
                             height: 20,
                         }
                     },],
                   }
-        
+
         if (file.length === 1) {
             if (dataSize < 1) {
                 let splitFile = file[0].split('\n')
@@ -331,12 +353,14 @@ const Upload = ({setOptions, options, setFileCount,
             setFileCount(0)
             setOptions(() => {
                     if (+file[0].split('\n')[0].split('\t')[0] < 0.010) { // check for 0.009
-                        chartOptions.xAxis.tickPositions = [-2.04575749056, -2, -1.69897000434,-1.52287874528 , -1.39794000867, -1.30102999566, -1.22184874962, -1.15490195999,  -1.09691001301, -1.04575749056, -1, -0.82390874094]
+                        chartOptions.xAxis.tickPositions = [-2.04575749056, -2, -1.69897000434,-1.52287874528 ,
+                             -1.39794000867, -1.30102999566, -1.22184874962, -1.15490195999,  -1.09691001301,
+                              -1.04575749056, -1, -0.82390874094]
                         chartOptions.xAxis.labels.format = '{value:.3f}'     
                     }
                     if (+file[0].split('\n')[0].split('\t')[0] > 0.14 && +file[0].split('\n')[0].split('\t')[0] < 0.16) {
                         chartOptions.xAxis.tickPositions = [
-                            -0.82390874094, -1, -0.69897000433,
+                            -0.82390874094, -0.69897000433,
                              -0.52287874528, -0.39794000867,
                             -0.30102999566, -0.22184874961, 
                             -0.15490195998, -0.096910013, 

@@ -146,6 +146,30 @@ const FileName = ({setOptions, options, changeFileName, setChangeFileName}: char
     
                 })} />
             </div>
+            <div><label>Width</label>
+            <input className='export' type={"number"} 
+                defaultValue={options?.exporting.sourceWidth}
+                // value={options?.title.text} 
+                onChange={(e) => setOptions((curr) => {
+                    e.preventDefault()
+                    let newCurr = {...curr!}
+                    newCurr.exporting.sourceWidth = +e.target.value
+                    return newCurr
+    
+                })} />
+            </div>
+            <div><label>Height</label>
+            <input className='export' type={"number"} 
+                defaultValue={options?.exporting.sourceHeight}
+                // value={options?.title.text} 
+                onChange={(e) => setOptions((curr) => {
+                    e.preventDefault()
+                    let newCurr = {...curr!}
+                    newCurr.exporting.sourceHeight = +e.target.value
+                    return newCurr
+    
+                })} />
+            </div>
             <div><button onClick={(e) => {
                 e.preventDefault()
                 setChangeFileName(false)
@@ -163,9 +187,12 @@ const StyledPopup = styled.div`
 background-color: #0000008d;
 width: 100%;
 height: 100%;
-position: absolute;
+position: fixed;
 left: 0;
 top: 0;
+.export {
+    width: 50px;
+}
 .outer-div {
   background-color: #20232A;;
   border: 5px solid #16181D;
@@ -176,7 +203,8 @@ top: 0;
   margin-left: auto; 
   margin-right: auto; 
   width: 400px;
-  height: 150px;
+  padding-bottom: 30px;
+  height: auto;
   margin-left: auto;
   margin-right: auto;
   form {

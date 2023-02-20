@@ -165,6 +165,16 @@ const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
                 newCurr.caption.text = e.target.value
                 return newCurr
             })} /></div>
+            <div><label>File Name</label>
+            <input type={"text"} 
+                defaultValue={options?.exporting.filename}
+                // value={options?.title.text} 
+                onChange={(e) => setOptions((curr) => {
+                    e.preventDefault()
+                    let newCurr = {...curr!}
+                    newCurr.exporting.filename = e.target.value
+                    return newCurr
+                })} /></div>
             <div><button onClick={(e) => {
                 e.preventDefault()
                 setTitleView(false)
@@ -182,7 +192,7 @@ const StyledPopup = styled.div`
 background-color: #0000008d;
 width: 100%;
 height: 100%;
-position: absolute;
+position: fixed;
 left: 0;
 top: 0;
 .outer-div {
@@ -195,7 +205,9 @@ top: 0;
   margin-left: auto; 
   margin-right: auto; 
   width: 600px;
-  height: 200px;
+  margin-bottom: auto;
+  /* height: 200px; */
+  padding-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
   form {
