@@ -12,9 +12,31 @@ type chartProp = {
         title: {
             text: string;
         };
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -39,6 +61,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
             
@@ -70,9 +93,32 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -97,6 +143,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -154,6 +201,8 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
         }
     }[] = []
      
+
+    
     
     return (
         <StyledPopup 
@@ -169,16 +218,24 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
                 e.preventDefault()
                 for(let i=6; i<options?.series.length!; i++) {
                     if (options?.series[i].name === "Peak (dB)") {
-                        emptyPeakStorage.push({
-                            data: [[]],
-                            color: "transparent", 
-                            type: "scatter",
-                            name: "",
-                            marker: {
-                                symbol: "",
-                                height: 0,
-                                width: 0,
-                            }
+                        // emptyPeakStorage.push({
+                        //     data: [[]],
+                        //     color: "transparent", 
+                        //     type: "scatter",
+                        //     name: "",
+                        //     marker: {
+                        //         symbol: "",
+                        //         height: 0,
+                        //         width: 0,
+                        //     }
+                        // })
+                        setOptions((currOptions) => {
+                            let newOptions = {...currOptions!}
+                            newOptions.series[i].data = []
+                            newOptions.series[i].name = ""
+                            newOptions.series[i].marker.symbol = ""
+
+                            return newOptions
                         })
                     } else if (options?.series[i].name === "") {
                         emptyPeakStorage.push(options?.series[i])
@@ -190,9 +247,9 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
                     setOptions((currOptions) => {
                         let newOptions = {...currOptions!}
                         let ns = newOptions.series // shorten
-                        ns[6] = newStorage[0]
-                        ns[7] = newStorage[1]
-                        ns[8] = newStorage[2]
+                        // ns[6] = newStorage[0]
+                        // ns[7] = newStorage[1]
+                        // ns[8] = newStorage[2]
                         return newOptions
                     })
                     setFirst((curr) => {
@@ -207,16 +264,24 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
                 e.preventDefault()
                 for(let i=6; i<options?.series.length!; i++) {
                     if (options?.series[i].name === "AV Peaks (dB)") {
-                        emptyPeakStorage.push({
-                            data: [[]],
-                            color: "transparent", 
-                            type: "scatter",
-                            name: "",
-                            marker: {
-                                symbol: "",
-                                height: 0,
-                                width: 0,
-                            }
+                        // emptyPeakStorage.push({
+                        //     data: [[]],
+                        //     color: "transparent", 
+                        //     type: "scatter",
+                        //     name: "",
+                        //     marker: {
+                        //         symbol: "",
+                        //         height: 0,
+                        //         width: 0,
+                        //     }
+                        // })
+                        setOptions((currOptions) => {
+                            let newOptions = {...currOptions!}
+                            newOptions.series[i].data = []
+                            newOptions.series[i].name = ""
+                            newOptions.series[i].marker.symbol = ""
+
+                            return newOptions
                         })
                     } else if (options?.series[i].name === "") {
                         emptyPeakStorage.push(options?.series[i])
@@ -227,10 +292,11 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
                 let newStorage: any[] = emptyPeakStorage.concat(tempPeakStorage)
                     setOptions((currOptions) => {
                         let newOptions = {...currOptions!}
-                        let ns = newOptions.series // shorten
-                        ns[6] = newStorage[0]
-                        ns[7] = newStorage[1]
-                        ns[8] = newStorage[2]
+                        // let ns = newOptions.series // shorten
+                        // ns[6] = newStorage[0]
+                        // ns[7] = newStorage[1]
+                        // ns[8] = newStorage[2]
+                        
                         return newOptions
                     })
                     setFirst((curr) => {
@@ -245,32 +311,56 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
             <div style={{display: first.q ? 'none' : ''}} ><label>Q Peaks (dB)</label>
             <button onClick={(e) => {
                 e.preventDefault()
+                let tempData = {...options?.series}
+                
                 for(let i=6; i<options?.series.length!; i++) {
+                    
                     if (options?.series[i].name === "Q Peaks (dB)") {
-                        emptyPeakStorage.push({
-                            data: [[]],
-                            color: "transparent", 
-                            type: "scatter",
-                            name: "",
-                            marker: {
-                                symbol: "",
-                                height: 0,
-                                width: 0,
-                            }
+                        setOptions((currOptions) => {
+                            let newOptions = {...currOptions!}
+                            newOptions.series[i].data = []
+                            newOptions.series[i].name = ""
+                            newOptions.series[i].marker.symbol = ""
+
+                            return newOptions
                         })
+                        // emptyPeakStorage.push({
+                        //     data: [[]],
+                        //     color: "transparent", 
+                        //     type: "scatter",
+                        //     name: "",
+                        //     marker: {
+                        //         symbol: "",
+                        //         height: 0,
+                        //         width: 0,
+                        //     }
+                        // })
                     } else if (options?.series[i].name === "") {
                         emptyPeakStorage.push(options?.series[i])
+                        
                     } else {
                         tempPeakStorage.push(options?.series[i]!)
+                        
                     }
                 }
+
                 let newStorage: any[] = emptyPeakStorage.concat(tempPeakStorage)
+                
                     setOptions((currOptions) => {
                         let newOptions = {...currOptions!}
                         let ns = newOptions.series // shorten
-                        ns[6] = newStorage[0]
-                        ns[7] = newStorage[1]
-                        ns[8] = newStorage[2]
+                        // console.log(newStorage[0], "NEWNEW");
+                        // console.log(newStorage[1], "NEWNEW");
+                        // console.log(newStorage[2], "NEWNEW");
+                        
+                        // ns[6] = newStorage[0]
+                        // ns[7] = newStorage[1]
+                        // ns[8] = newStorage[2]
+
+                        // console.log(ns[6], "NEW---NEW");
+                        // console.log(ns[7], "NEW---NEW");
+                        // console.log(ns[8], "NEW---NEW");
+
                         return newOptions
                     })
                     setFirst((curr) => {
@@ -278,6 +368,8 @@ const PeakRemoval = ({setOptions, options, removePeakFile, setRemovePeakFile}: c
                         newCurr.q = true
                         return newCurr
                     })
+
+
             }} >Delete</button>
             </div>
             <div><button onClick={(e) => {

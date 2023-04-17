@@ -16,9 +16,33 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
+            
         };
         subtitle: {
             text: string;
@@ -44,6 +68,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -74,9 +99,32 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -101,6 +149,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -217,6 +266,7 @@ const Upload = ({setOptions, options, setFileCount,
                         title: {text: "Emissions level (dBuV)", style: {fontSize: 10}},
                         gridLineWidth: 1,
                         lineWidth: 1,
+                        tickAmount: undefined,
                         labels: {
                             style: {
                                 fontSize: 7,
@@ -231,9 +281,12 @@ const Upload = ({setOptions, options, setFileCount,
                         align: 'bottom',
                         verticalAlign: 'bottom',
                         alignColumns: false,
+                        itemStyle: {
+                            fontSize: "12px"
+                        },
                         title: {
                             text: "Keys",
-                            style: {fontSize: 10}
+                            style: {fontSize: 12}
                         },
                         x:0,
                         y:10,
@@ -243,14 +296,7 @@ const Upload = ({setOptions, options, setFileCount,
                         sourceHeight: 500,
                         allowHTML: true,
                         filename: "File Name",
-                        buttons: {
-                            contextButton: {
-                                onclick: () => {
-                                    console.log("hello");
-                                    
-                                }
-                            }
-                        }
+                        
                     },
                     credits: {
                         text: "Cassindustries.com",

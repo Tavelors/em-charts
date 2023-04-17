@@ -11,6 +11,25 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         subtitle: {
             text: string;
             align: string;
@@ -33,11 +52,16 @@ type chartProp = {
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         yAxis: {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -68,9 +92,32 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -95,6 +142,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };

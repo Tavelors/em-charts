@@ -67,6 +67,25 @@ export default function Chart() {
     title: {
         text: string;
     };
+    
+    legend: {
+      layout: string;
+      align: string;
+      verticalAlign: string;
+      alignColumns: boolean;
+      itemStyle: {
+          fontSize: string;
+      };
+      title: {
+          text: string;
+          style: {
+              fontSize: number;
+          };
+      };
+      x: number;
+      y: number;
+  }
+    
     subtitle: {
       text: string;
       align: string;
@@ -90,12 +109,17 @@ export default function Chart() {
       title: {
           text: string;
       };
+      tickAmount: number | undefined;
       min: number | null;
       max: number | null;
     };
     caption: {
       text: string;
       align: string;
+      style: {
+        "font-size": string;
+        marginTop: string;
+    };
   };
     series: {
         data: number[][];
@@ -155,6 +179,10 @@ const [fakeOptions, setFakeOptions] = useState<any>()
           caption: {
             text: "Graph 2 - Background scan",
             align: "center",
+            style: {
+              "font-size" : "10px",
+              "marginTop" : "10px"
+           },
           },
           
           credits: {
@@ -371,7 +399,23 @@ const [fakeOptions, setFakeOptions] = useState<any>()
     redraw={false}
     Ref="chart"
     />
-
+  {/* <button 
+  onClick={(e) => {
+    console.log(e);
+    setFakeOptions((fake:any) => {
+      let neww = {...fake}
+      neww.caption.style = {
+        "font-size": "20px",
+        "marginTop": "30px",
+        "marginBottom": "10px"
+      }
+      return neww
+    })
+    // console.log();
+    
+    
+  }}
+  >hi</button> */}
     <AxisLabel setOptions={setOptions} options={options}  //  Edit Charts Drop down popups
     axisLabelView={axisLabelView} setAxisLabelView={setAxisLabelView} />
     <Title setOptions={setOptions} options={options}
@@ -565,6 +609,18 @@ const [fakeOptions, setFakeOptions] = useState<any>()
             newCurr.yAxis.min! -= 10
             return newCurr
           })} >-</button>
+        </div>
+      </li>
+      <li>
+        <div className="input-Min" >
+        <input  defaultValue={options?.yAxis.tickAmount} 
+        onChange={(e) => setOptions((curr) => {
+          e.preventDefault()
+          let newCurr = {...curr!}
+          newCurr.yAxis.tickAmount = +e.target.value
+          return newCurr
+          
+      })} />
         </div>
       </li>
       

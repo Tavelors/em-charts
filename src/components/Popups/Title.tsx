@@ -11,9 +11,32 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -38,6 +61,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
             
@@ -69,9 +93,32 @@ type chartProp = {
         title: {
             text: string;
         };
+
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -96,6 +143,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -164,7 +212,20 @@ const Title = ({setOptions, options, titleView, setTitleView}: chartProp) => {
                 let newCurr = {...curr!}
                 newCurr.caption.text = e.target.value
                 return newCurr
-            })} /></div>
+            })} /><input style={{width: '20px', marginLeft: '5px'}}
+            defaultValue={options?.caption.style['font-size'].replace(/\D/g,'')}
+            onChange={(e) => {
+                console.log(e.target.value);
+                setOptions((currOptions:any) => {
+                    let newOptions = {...currOptions}
+                    
+                    newOptions.caption.style['font-size'] = e.target.value + 'px'
+                    // newOptions
+                    return newOptions
+                })
+                
+            }}
+            /></div>
             <div><label>File Name</label>
             <input type={"text"} 
                 defaultValue={options?.exporting.filename}
@@ -212,7 +273,7 @@ top: 0;
   margin-right: auto;
   form {
     input {
-        width: 400px;
+        width: 300px;
     }
     div{
         margin-top: 20px;

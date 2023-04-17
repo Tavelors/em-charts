@@ -14,9 +14,31 @@ type chartProp = {
         title: {
             text: string;
         };
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -41,6 +63,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -71,9 +94,31 @@ type chartProp = {
         title: {
             text: string;
         };
+        legend: {
+            layout: string;
+            align: string;
+            verticalAlign: string;
+            alignColumns: boolean;
+            itemStyle: {
+                fontSize: string;
+            };
+            title: {
+                text: string;
+                style: {
+                    fontSize: number;
+                };
+            };
+            x: number;
+            y: number;
+        }
+          
         caption: {
             text: string;
             align: string;
+            style: {
+                "font-size": string;
+                marginTop: string;
+            };
         };
         subtitle: {
             text: string;
@@ -98,6 +143,7 @@ type chartProp = {
             title: {
                 text: string;
             };
+            tickAmount: number | undefined;
             min: number | null;
             max: number | null;
           };
@@ -145,9 +191,23 @@ const DataKeys = ({setOptions, options, dataKeysView, setDataKeysView}: chartPro
         <StyledPopup 
         style={{display: dataKeysView ? '' : 'none'}} >
           <div  className='outer-div' >
-            
+            <div>
+            <label>{"Legend Size"}</label> <input
+            defaultValue={options?.legend.itemStyle.fontSize.replace(/\D/g,'')}
+            onChange={(e) => {
+                setOptions((currOptions:any) => {
+                    let newOptions = {...currOptions}
+                    newOptions.legend.itemStyle.fontSize = e.target.value
+                    return newOptions
+                })
+            }}
+            style={{width: "15px", marginRight: "5px"}} />
+            </div>
             <div style={{display: options?.series[0].data.length! > 1 ? '' : 'none'}} >     
             <ul>
+                <li>
+                    
+                </li>
                 <li>
                     <label>{"Data Line"}</label>
                 </li>
